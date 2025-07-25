@@ -64,55 +64,59 @@
       "206-주의 말씀대로.pdf"
     ];
 
-    async function searchHymn() {
-      const input = document.getElementById("searchInput").value.trim();
-      const viewer = document.getElementById("pdfViewer");
+async function searchHymn() {
+  const input = document.getElementById("searchInput").value.trim();
+  const viewer = document.getElementById("pdfViewer");
 
-      if (!input) {
-        alert("장수 또는 제목을 입력해주세요.");
-        return;
-      }
+  if (!input) {
+    alert("장수 또는 제목을 입력해주세요.");
+    return;
+  }
 
-      let found = null;
+  let found = null;
 
-      if (/^\d+$/.test(input)) {
-        const padded = input.padStart(3, '0');
-        found = hymnList.find(file => file.startsWith(padded + "-"));
-      } else {
-        found = hymnList.find(file => file.toLowerCase().includes(input.toLowerCase()));
-      }
+  if (/^\d+$/.test(input)) {
+    const padded = input.padStart(3, '0');
+    found = hymnList.find(file => file.startsWith(padded + "-"));
+  } else {
+    // 🔍 공백 제거 후 소문자로 비교
+    const normalizedInput = input.toLowerCase().replace(/\s+/g, '');
+    found = hymnList.find(file =>
+      file.toLowerCase().replace(/\s+/g, '').includes(normalizedInput)
+    );
+  }
 
-      if (!found) {
-        viewer.innerHTML = `<p style="font-size: 1em; color: red;">❌ 해당 성가를 찾을 수 없습니다.</p>`;
-        return;
-      }
+  if (!found) {
+    viewer.innerHTML = `<p style="font-size: 1em; color: red;">❌ 해당 성가를 찾을 수 없습니다.</p>`;
+    return;
+  }
 
-      const url = `hymns/${encodeURIComponent(found)}`;
+  const url = `hymns/${encodeURIComponent(found)}`;
 
-      try {
-        const loadingTask = pdfjsLib.getDocument(url);
-        const pdf = await loadingTask.promise;
+  try {
+    const loadingTask = pdfjsLib.getDocument(url);
+    const pdf = await loadingTask.promise;
 
-        viewer.innerHTML = ''; // 기존 내용 비우기
+    viewer.innerHTML = ''; // 기존 내용 비우기
 
-        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-          const page = await pdf.getPage(pageNum);
-          const scale = 1.6; // 크기 약간 키움
-          const viewport = page.getViewport({ scale });
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const scale = 1.6;
+      const viewport = page.getViewport({ scale });
 
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
 
-          await page.render({ canvasContext: context, viewport }).promise;
-          viewer.appendChild(canvas);
-        }
-      } catch (error) {
-        viewer.innerHTML = `<p style="color:red;">❗ PDF 파일을 불러오는 중 오류가 발생했습니다.</p>`;
-        console.error(error);
-      }
+      await page.render({ canvasContext: context, viewport }).promise;
+      viewer.appendChild(canvas);
     }
+  } catch (error) {
+    viewer.innerHTML = `<p style="color:red;">❗ PDF 파일을 불러오는 중 오류가 발생했습니다.</p>`;
+    console.error(error);
+  }
+}
   </script>
 </body>
 </html>
