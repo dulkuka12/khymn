@@ -7,32 +7,31 @@
   <link rel="manifest" href="manifest.json">
   <title>성가 검색 (PDF.js)</title>
 
-  <!-- pdf.js CSS (CDN) -->
+  <!-- pdf.js CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
 
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      padding: 20px;
+      padding: 12px;
       background-color: #f2f2f2;
       margin: 0;
     }
 
-    input {
-      padding: 10px;
+    h2 {
       font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+
+    input {
+      padding: 6px 10px;
+      font-size: 1em;
       width: 70%;
     }
 
-    button {
-      padding: 10px;
-      font-size: 1.1em;
-      margin-left: 5px;
-    }
-
     #pdfViewer {
-      margin-top: 20px;
-      height: 90vh;
+      margin-top: 12px;
+      height: calc(100vh - 100px); /* 상단 공간을 감안한 높이 */
       overflow-y: auto;
       background: white;
       border: 1px solid #ccc;
@@ -48,14 +47,13 @@
 </head>
 
 <body>
-  <h2>📖 성가 검색 (내장 뷰어)</h2>
+  <h2>📖 성가 검색</h2>
 
-  <input id="searchInput" type="text" placeholder="장수나 제목 입력">
-  <button onclick="searchHymn()">검색</button>
+  <input id="searchInput" type="text" placeholder="장수나 제목 입력" onkeydown="if (event.key === 'Enter') searchHymn()">
 
-  <div id="pdfViewer"><p>🔍 위에서 성가 장수 또는 제목을 입력하세요.</p></div>
+  <div id="pdfViewer"><p style="font-size: 0.95em;">🔍 장수 또는 제목 입력 후 <b>Enter</b> 키를 누르세요.</p></div>
 
-  <!-- pdf.js JS (CDN) -->
+  <!-- pdf.js JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.js"></script>
 
@@ -85,7 +83,7 @@
       }
 
       if (!found) {
-        viewer.innerHTML = `<p style="font-size: 1.2em;">❌ 해당 성가를 찾을 수 없습니다.</p>`;
+        viewer.innerHTML = `<p style="font-size: 1em; color: red;">❌ 해당 성가를 찾을 수 없습니다.</p>`;
         return;
       }
 
@@ -99,7 +97,7 @@
 
         for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
           const page = await pdf.getPage(pageNum);
-          const scale = 1.5;
+          const scale = 1.6; // 크기 약간 키움
           const viewport = page.getViewport({ scale });
 
           const canvas = document.createElement('canvas');
