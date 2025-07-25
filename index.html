@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="manifest" href="manifest.json">
+  <title>성가 검색</title>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      padding: 20px;
+      background-color: #f2f2f2;
+      margin: 0;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 1.2em;
+      width: 70%;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 1.1em;
+      margin-left: 5px;
+    }
+
+    #pdfViewer {
+      margin-top: 20px;
+      height: 90vh; /* 추가: 검색창 아래 거의 전체 */
+    }
+
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+      background: white; /* 검은 영역 방지 */
+    }
+  </style>
+</head>
+<body>
+  <h2>📖 성가 검색</h2>
+
+  <input id="searchInput" type="text" placeholder="장수나 제목 입력">
+  <button onclick="searchHymn()">검색</button>
+
+  <div id="pdfViewer"></div>
+
+  <script>
+    const hymnList = [
+      "204-장엄하다 주님 행차.pdf",
+      "205-세상사람 죄를 짓고.pdf",
+      "206-주의 말씀대로.pdf"
+    ];
+
+    function searchHymn() {
+      const input = document.getElementById("searchInput").value.trim();
+      const viewer = document.getElementById("pdfViewer");
+
+      if (!input) {
+        alert("장수 또는 제목을 입력해주세요.");
+        return;
+      }
+
+      let found = null;
+
+      if (/^\d+$/.test(input)) {
+        const padded = input.padStart(3, '0');
+        found = hymnList.find(file => file.startsWith(padded + "-"));
+      } else {
+        found = hymnList.find(file => file.toLowerCase().includes(input.toLowerCase()));
+      }
+
+      if (found) {
+        viewer.innerHTML = `
+          <iframe src="hymns/${encodeURIComponent(found)}#zoom=page-width&view=FitH&toolbar=0&navpanes=0&v=${Date.now()}"
+                  allowfullscreen></iframe>
+        `;
+      } else {
+        viewer.innerHTML = `<p style="font-size: 1.2em;">❌ 해당 성가를 찾을 수 없습니다.</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
