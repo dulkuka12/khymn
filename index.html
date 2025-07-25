@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#ffffff" />
   <link rel="manifest" href="manifest.json">
-  <title>성가 검색</title>
+  <title>성가 검색 (PDF.js)</title>
+
+  <!-- pdf.js CSS (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
@@ -28,24 +32,32 @@
 
     #pdfViewer {
       margin-top: 20px;
-      height: 90vh; /* 추가: 검색창 아래 거의 전체 */
+      height: 90vh;
+      overflow-y: auto;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
     }
 
-    iframe {
-      border: none;
-      width: 100%;
-      height: 100%;
-      background: white; /* 검은 영역 방지 */
+    canvas {
+      display: block;
+      margin: 0 auto 16px auto;
+      box-shadow: 0 0 4px rgba(0,0,0,0.1);
     }
   </style>
 </head>
+
 <body>
-  <h2>📖 성가 검색</h2>
+  <h2>📖 성가 검색 (내장 뷰어)</h2>
 
   <input id="searchInput" type="text" placeholder="장수나 제목 입력">
   <button onclick="searchHymn()">검색</button>
 
-  <div id="pdfViewer"></div>
+  <div id="pdfViewer"><p>🔍 위에서 성가 장수 또는 제목을 입력하세요.</p></div>
+
+  <!-- pdf.js JS (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.js"></script>
 
   <script>
     const hymnList = [
@@ -54,7 +66,7 @@
       "206-주의 말씀대로.pdf"
     ];
 
-    function searchHymn() {
+    async function searchHymn() {
       const input = document.getElementById("searchInput").value.trim();
       const viewer = document.getElementById("pdfViewer");
 
@@ -72,13 +84,35 @@
         found = hymnList.find(file => file.toLowerCase().includes(input.toLowerCase()));
       }
 
-      if (found) {
-        viewer.innerHTML = `
-          <iframe src="hymns/${encodeURIComponent(found)}#zoom=page-width&view=FitH&toolbar=0&navpanes=0&v=${Date.now()}"
-                  allowfullscreen></iframe>
-        `;
-      } else {
+      if (!found) {
         viewer.innerHTML = `<p style="font-size: 1.2em;">❌ 해당 성가를 찾을 수 없습니다.</p>`;
+        return;
+      }
+
+      const url = `hymns/${encodeURIComponent(found)}`;
+
+      try {
+        const loadingTask = pdfjsLib.getDocument(url);
+        const pdf = await loadingTask.promise;
+
+        viewer.innerHTML = ''; // 기존 내용 비우기
+
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+          const page = await pdf.getPage(pageNum);
+          const scale = 1.5;
+          const viewport = page.getViewport({ scale });
+
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          await page.render({ canvasContext: context, viewport }).promise;
+          viewer.appendChild(canvas);
+        }
+      } catch (error) {
+        viewer.innerHTML = `<p style="color:red;">❗ PDF 파일을 불러오는 중 오류가 발생했습니다.</p>`;
+        console.error(error);
       }
     }
   </script>
