@@ -1,10 +1,11 @@
- {
+{
   "name": "성공회 2015성가",
   "short_name": "2015성가",
   "start_url": "/khymn/index.html",
+  "scope": "/khymn/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#228b22",
+  "theme_color": "#4b0082",
   "icons": [
     {
       "src": "icon-192.png",
@@ -18,4 +19,3 @@
     }
   ]
 }
-                                                                                                                                                                                                                                                                                                                                           
