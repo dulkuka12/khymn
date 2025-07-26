@@ -27,18 +27,21 @@
     input {
       padding: 6px 10px;
       font-size: 1em;
-      width: 70%;
+      width: 200px;
+      /* 너무 길지 않게 조절 */
     }
 
+    /* PDF 뷰어 높이를 더 크게 확보 */
     #pdfViewer {
       margin-top: 12px;
-      height: calc(100vh - 100px);
-      /* 상단 공간을 감안한 높이 */
+      height: calc(100vh - 70px);
+      /* 기존보다 더 높게 */
       overflow-y: auto;
       background: white;
       border: 1px solid #ccc;
       padding: 10px;
     }
+
 
     canvas {
       display: block;
@@ -49,9 +52,10 @@
 </head>
 
 <body>
-  <h2>📖 성가 검색</h2>
-
-  <input id="searchInput" type="text" placeholder="장수나 제목 입력" onkeydown="if (event.key === 'Enter') searchHymn()">
+  <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
+    <h2 style="margin: 0;">📖 성가 검색</h2>
+    <input id="searchInput" type="text" placeholder="장수나 제목 입력" onkeydown="if (event.key === 'Enter') searchHymn()">
+  </div>
 
   <div id="pdfViewer">
     <p style="font-size: 0.95em;">🔍 장수 또는 제목 입력 후 <b>Enter</b> 키를 누르세요.</p>
