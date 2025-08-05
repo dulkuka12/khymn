@@ -1,170 +1,205 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#ffffff" />
-  <link rel="manifest" href="manifest.json">
-  <title>성가 검색 (PDF.js)</title>
-
-  <!-- pdf.js CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>성가 검색 (전체 PDF)</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      padding: 12px;
       background-color: #f2f2f2;
       margin: 0;
+      padding: 12px;
     }
-
     h2 {
       font-size: 1.2em;
-      margin-bottom: 10px;
+      margin: 0 0 10px 0;
     }
-
     input {
       padding: 6px 10px;
       font-size: 1em;
-      width: 200px;
-      /* 너무 길지 않게 조절 */
+      width: 80px;
+      margin-right: 6px;
     }
-
-    /* PDF 뷰어 높이를 더 크게 확보 */
+    button {
+      padding: 6px 10px;
+      margin: 0 4px;
+    }
     #pdfViewer {
-      margin-top: 12px;
-      height: calc(100vh - 70px);
-      /* 기존보다 더 높게 */
-      overflow-y: auto;
+      margin-top: 16px;
       background: white;
-      border: 1px solid #ccc;
       padding: 10px;
+      border: 1px solid #ccc;
     }
-
-
     canvas {
       display: block;
-      margin: 0 auto 16px auto;
+      margin: auto;
       box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    }
+    #bookmarkPopup {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: 1px solid #888;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      z-index: 999;
+    }
+    #bookmarkPopup input {
+      margin-bottom: 6px;
     }
   </style>
 </head>
-
 <body>
-  <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
-    <h2 style="margin: 0;">📖 성가 검색</h2>
-    <input id="searchInput" type="text" placeholder="장수나 제목 입력" onkeydown="if (event.key === 'Enter') searchHymn()">
+  <h2>📖 성가 검색</h2>
+  <input id="searchInput" type="text" placeholder="장수나 제목 입력" onkeydown="if (event.key === 'Enter') searchHymn()">
+  <button onclick="searchHymn()">검색</button>
+
+  <div style="margin-top: 10px;">
+    <button onclick="goToPreviousPage()">⬅️ 이전 페이지</button>
+    <button onclick="goToNextPage()">다음 페이지 ➡️</button>
+    <button onclick="openBookmarkPopup()">📌 성가 책갈피</button>
+  </div>
+
+  <div id="bookmarkPopup">
+    <h3>📌 오늘의 성가</h3>
+    <div id="bookmarkList"></div>
+    <div style="margin-top:10px;">
+      <input id="newBookmark" placeholder="장수 입력">
+      <button onclick="addBookmark()">추가</button>
+      <button onclick="clearBookmarks()">모두 지우기</button>
+      <button onclick="closeBookmarkPopup()">닫기</button>
+    </div>
   </div>
 
   <div id="pdfViewer">
-    <p style="font-size: 0.95em;">🔍 장수 또는 제목 입력 후 <b>Enter</b> 키를 누르세요.</p>
+    <canvas id="pdfCanvas"></canvas>
   </div>
 
-  <!-- pdf.js JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.js"></script>
-
   <script>
-    const hymnList = [
-      "001-아침저녁기도.pdf",
-      "002-저녁기도.pdf",
-      "003-시편95편(A).pdf",
-      "004-시편95편(B).pdf",
-      "005-시편100편(A).pdf",
-      "006-시편100편(B).pdf",
-      "007-부활송가(A).pdf",
-      "008-부활송가(B).pdf",
-      "009-즈가리야송가(A).pdf",
-      "010-즈가리야송가(B).pdf",
-      "011-이사야 첫째송가(A).pdf",
-      "012-이사야 첫째송가(B).pdf",
-      "013-은혜로운 빛이여(A).pdf",
-      "014-은혜로운 빛이여(B).pdf",
-      "015-성모 마리아송가(A).pdf",
-      "016-성모 마리아송가(B).pdf",
-      "101-고요히 자줏빛으로.pdf",
-      "102-새 아침 밝아.pdf",
-      "103-주님의 사랑은 멈추지 않고.pdf",
-      "104-생명의 참빛 예수님.pdf",
-      "105-이 날도 지고.pdf",
-      "204-장엄하다 주님 행차.pdf",
-      "205-세상사람 죄를 짓고.pdf",
-      "206-주의 말씀대로.pdf"
-    ];
+    let pdfDoc = null;
+    let hymnIndex = [];
+    let currentPage = 1;
+    let bookmarks = [];
 
-    async function searchHymn() {
-      const input = document.getElementById("searchInput").value.trim();
-      const viewer = document.getElementById("pdfViewer");
+    pdfjsLib.getDocument("hymnbook.pdf").promise.then(doc => {
+      pdfDoc = doc;
+      renderPage(currentPage);
+    });
 
-      if (!input) {
-        alert("장수 또는 제목을 입력해주세요.");
+    fetch("hymn-index-final.json")
+      .then(res => res.json())
+      .then(data => {
+        hymnIndex = data;
+      });
+
+    function searchHymn() {
+      const inputRaw = document.getElementById("searchInput").value.trim();
+      const input = inputRaw.toLowerCase().replace(/\s+/g, "");
+
+      if (!input || !pdfDoc || hymnIndex.length === 0) return;
+
+      const match = hymnIndex.find(item => {
+        const numberMatch = item.number.toString() === input;
+        const titleMatch = item.title.replace(/\s+/g, "").toLowerCase().includes(input);
+        return numberMatch || (!/^\d+$/.test(input) && titleMatch);
+      });
+
+      if (!match) {
+        alert("❌ 해당 성가를 찾을 수 없습니다.");
         return;
       }
 
-      let results = [];
+      currentPage = match.page;
+      renderPage(currentPage);
+    }
 
-      if (/^\d+$/.test(input)) {
-        // 숫자 입력: 앞에 0 채워서 정확히 일치하는 파일 찾기
-        const padded = input.padStart(3, '0');
-        results = hymnList.filter(file => file.startsWith(padded + "-"));
-      } else {
-        // 문자열 검색: 공백 제거 후 부분 포함 여부로 필터링
-        const normalizedInput = input.toLowerCase().replace(/\s+/g, '');
-        results = hymnList.filter(file =>
-          file.toLowerCase().replace(/\s+/g, '').includes(normalizedInput)
-        );
-      }
+    function renderPage(pageNumber) {
+      const canvas = document.getElementById("pdfCanvas");
+      const context = canvas.getContext("2d");
 
-      if (results.length === 0) {
-        viewer.innerHTML = `<p style="font-size: 1em; color: red;">❌ 해당 성가를 찾을 수 없습니다.</p>`;
-        return;
-      }
+      pdfDoc.getPage(pageNumber).then(page => {
+        const scale = 1.6;
+        const viewport = page.getViewport({ scale });
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        page.render({ canvasContext: context, viewport });
+        currentPage = pageNumber;
+      });
+    }
 
-      let selectedFile = results[0];
-
-      if (results.length > 1) {
-        let msg = "여러 곡이 검색되었습니다:\n\n";
-        results.forEach((file, index) => {
-          msg += `${index + 1}. ${file}\n`;
-        });
-        const choice = prompt(msg + "\n원하는 번호를 입력하세요:");
-        const index = parseInt(choice) - 1;
-        if (index >= 0 && index < results.length) {
-          selectedFile = results[index];
-        } else {
-          viewer.innerHTML = `<p style="color:red;">❌ 유효한 번호를 선택하지 않아 검색이 취소되었습니다.</p>`;
-          return;
-        }
-      }
-
-      const url = `hymns/${encodeURIComponent(selectedFile)}`;
-
-      try {
-        const loadingTask = pdfjsLib.getDocument(url);
-        const pdf = await loadingTask.promise;
-
-        viewer.innerHTML = ''; // 기존 내용 비우기
-
-        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-          const page = await pdf.getPage(pageNum);
-          const scale = 1.6;
-          const viewport = page.getViewport({ scale });
-
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-
-          await page.render({ canvasContext: context, viewport }).promise;
-          viewer.appendChild(canvas);
-        }
-      } catch (error) {
-        viewer.innerHTML = `<p style="color:red;">❗ PDF 파일을 불러오는 중 오류가 발생했습니다.</p>`;
-        console.error(error);
+    function goToPreviousPage() {
+      if (currentPage > 1) {
+        renderPage(currentPage - 1);
       }
     }
+
+    function goToNextPage() {
+      if (currentPage < pdfDoc.numPages) {
+        renderPage(currentPage + 1);
+      }
+    }
+
+    function jumpTo(num) {
+      const match = hymnIndex.find(item => item.number.toString() === num.trim());
+      if (match) {
+        currentPage = match.page;
+        renderPage(currentPage);
+      } else {
+        alert("❌ 해당 장수가 존재하지 않습니다.");
+      }
+    }
+
+    function openBookmarkPopup() {
+      loadBookmarks();
+      updateBookmarkList();
+      document.getElementById("bookmarkPopup").style.display = "block";
+    }
+
+    function closeBookmarkPopup() {
+      document.getElementById("bookmarkPopup").style.display = "none";
+    }
+
+    function addBookmark() {
+      const val = document.getElementById("newBookmark").value.trim();
+      if (val && !bookmarks.includes(val) && bookmarks.length < 5) {
+        bookmarks.push(val);
+        saveBookmarks();
+        updateBookmarkList();
+        document.getElementById("newBookmark").value = '';
+      }
+    }
+
+    function clearBookmarks() {
+      bookmarks = [];
+      localStorage.removeItem("hymnBookmarks");
+      updateBookmarkList();
+    }
+
+    function updateBookmarkList() {
+      const container = document.getElementById("bookmarkList");
+      container.innerHTML = bookmarks.map(num => `<button onclick=\"jumpTo('${num}')\">성가 ${num}</button>`).join("<br>");
+    }
+
+    function saveBookmarks() {
+      localStorage.setItem("hymnBookmarks", JSON.stringify(bookmarks));
+    }
+
+    function loadBookmarks() {
+      const saved = localStorage.getItem("hymnBookmarks");
+      if (saved) {
+        bookmarks = JSON.parse(saved);
+      }
+    }
+
+    // 앱 실행 시 자동 불러오기
+    window.addEventListener('load', () => {
+      loadBookmarks();
+    });
   </script>
 </body>
-
 </html>
