@@ -175,7 +175,7 @@
         container.innerHTML += `
           <div class="bookmark-entry">
             <input id="bmInput${i}" value="${value}" maxlength="3" placeholder="성가번호" onkeydown="if(event.key === 'Enter') jumpToHymn(this.value)">
-            <button onclick="saveBookmark(${i})">추가</button>
+            <button onclick="saveBookmark(${i})">저장</button>
             <button onclick="deleteBookmark(${i})">삭제</button>
           </div>`;
       }
