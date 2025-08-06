@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,21 +13,25 @@
       margin: 0;
       padding: 12px;
     }
+
     h2 {
       font-size: 1.2em;
       margin: 0;
       display: inline-block;
     }
+
     #searchInput {
       padding: 6px 10px;
       font-size: 1em;
       width: 160px;
       margin-left: 10px;
     }
+
     button {
       padding: 6px 10px;
       margin: 0 4px;
     }
+
     #pdfViewer {
       margin-top: 16px;
       background: white;
@@ -34,12 +39,14 @@
       border: 1px solid #ccc;
       text-align: center;
     }
+
     canvas {
       display: inline-block;
       max-width: 100%;
       height: auto;
       box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     }
+
     #bookmarkPopup {
       display: none;
       position: fixed;
@@ -49,14 +56,16 @@
       background: #fff;
       border: 1px solid #888;
       padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
       z-index: 999;
     }
+
     #bookmarkPopup input {
       margin-bottom: 6px;
     }
   </style>
 </head>
+
 <body>
   <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
     <h2>📖 성가 검색</h2>
@@ -107,12 +116,13 @@
 
       if (!input || !pdfDoc || hymnIndex.length === 0) return;
 
+
       const match = hymnIndex.find(item => {
         const numberMatch = item.number.toString() === input;
         const titleMatch = item.title.replace(/\s+/g, "").toLowerCase().includes(input);
-        return numberMatch || (!/^
-\d+$/.test(input) && titleMatch);
+        return numberMatch || (!/^\d+$/.test(input) && titleMatch);
       });
+
 
       if (!match) {
         alert("❌ 해당 성가를 찾을 수 없습니다.");
@@ -205,4 +215,5 @@
     });
   </script>
 </body>
+
 </html>
