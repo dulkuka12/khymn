@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,16 +13,19 @@
       margin: 0;
       padding: 12px;
     }
+
     #searchInput {
       padding: 6px 8px;
       font-size: 1em;
       width: 130px;
       border: 1px solid #ccc;
     }
+
     button {
       padding: 6px 10px;
       margin: 0 4px;
     }
+
     #pdfViewer {
       margin-top: 16px;
       background: white;
@@ -29,12 +33,14 @@
       border: 1px solid #ccc;
       text-align: center;
     }
+
     canvas {
       display: inline-block;
       max-width: 100%;
       height: auto;
       box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     }
+
     #bookmarkPopup {
       display: none;
       position: fixed;
@@ -44,10 +50,11 @@
       background: #fff;
       border: 1px solid #888;
       padding: 20px 30px 20px 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
       z-index: 999;
       min-width: 250px;
     }
+
     #bookmarkPopup .closeBtn {
       position: absolute;
       top: 8px;
@@ -57,11 +64,13 @@
       font-size: 18px;
       cursor: pointer;
     }
+
     .bookmark-entry {
       display: flex;
       align-items: center;
       margin-bottom: 8px;
     }
+
     .bookmark-entry input {
       width: 100px;
       padding: 6px;
@@ -69,6 +78,7 @@
       text-align: center;
       border: 1px solid #ccc;
     }
+
     .bookmark-entry button {
       margin-left: 6px;
       padding: 6px;
@@ -76,10 +86,12 @@
     }
   </style>
 </head>
+
 <body>
   <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
     <label for="searchInput">성가 검색</label>
-    <input id="searchInput" type="text" inputmode="numeric" placeholder="장수나 제목 입력"onkeydown="if (event.key === 'Enter') searchHymn()">
+    <input id="searchInput" type="text" inputmode="numeric" placeholder="장수나 제목 입력"
+      onkeydown="if (event.key === 'Enter') searchHymn()">
     <!--<input id="searchInput" type="text" placeholder="장수나 제목 입력" onkeydown="if (event.key === 'Enter') searchHymn()">-->
     <button onclick="openBookmarkPopup()">📌 책갈피</button>
   </div>
@@ -167,6 +179,7 @@
       document.getElementById("bookmarkPopup").style.display = "none";
     }
 
+
     function updateBookmarkList() {
       const container = document.getElementById("bookmarkList");
       container.innerHTML = '';
@@ -174,13 +187,14 @@
       for (let i = 0; i < 5; i++) {
         const value = bookmarks[i] || "";
         container.innerHTML += `
-          <div class="bookmark-entry">
-            <input id="bmInput0" type="number" inputmode="numeric" maxlength="3" placeholder="성가번호" onkeydown="if(event.key === 'Enter') jumpToHymn(this.value)">
-            <button onclick="saveBookmark(${i})">저장</button>
-            <button onclick="deleteBookmark(${i})">삭제</button>
-          </div>`;
+      <div class="bookmark-entry">
+        <input id="bmInput${i}" type="number" inputmode="numeric" maxlength="3" placeholder="성가번호" value="${value}" onkeydown="if(event.key === 'Enter') jumpToHymn(this.value)">
+        <button onclick="saveBookmark(${i})">저장</button>
+        <button onclick="deleteBookmark(${i})">삭제</button>
+      </div>`;
       }
     }
+
 
     function saveBookmark(index) {
       const input = document.getElementById(`bmInput${index}`);
@@ -231,4 +245,5 @@
     });
   </script>
 </body>
+
 </html>
