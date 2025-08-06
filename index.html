@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>성가2015</title>
+  <title>성가 검색 (전체 PDF)</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <style>
     body {
@@ -11,10 +11,6 @@
       background-color: #f2f2f2;
       margin: 0;
       padding: 12px;
-    }
-    #searchLabel {
-      font-size: 1.1em;
-      margin-right: 6px;
     }
     #searchInput {
       padding: 6px 8px;
@@ -80,7 +76,7 @@
 </head>
 <body>
   <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-    <label id="searchLabel">성가 검색</label>
+    <label for="searchInput">성가 검색</label>
     <input id="searchInput" type="text" placeholder="장수나 제목 입력" onkeydown="if (event.key === 'Enter') searchHymn()">
     <button onclick="openBookmarkPopup()">📌 책갈피</button>
   </div>
@@ -126,9 +122,14 @@
       }
 
       const startPage = hymnIndex[matchIndex].page;
-      const endPage = (matchIndex + 1 < hymnIndex.length) 
-        ? hymnIndex[matchIndex + 1].page - 1
-        : pdfDoc.numPages;
+      let endPage = pdfDoc.numPages;
+
+      for (let i = matchIndex + 1; i < hymnIndex.length; i++) {
+        if (hymnIndex[i].page > startPage) {
+          endPage = hymnIndex[i].page - 1;
+          break;
+        }
+      }
 
       renderPages(startPage, endPage);
     }
