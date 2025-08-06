@@ -72,7 +72,8 @@
     }
 
     .bookmark-entry input {
-      width: 100px;
+      width: 90px;
+      /* 기존 100px → 약간 축소 */
       padding: 6px;
       font-size: 1em;
       text-align: center;
@@ -81,9 +82,15 @@
 
     .bookmark-entry button {
       margin-left: 6px;
-      padding: 6px;
+      padding: 6px 10px;
+      /* 좌우 패딩을 추가하여 너비 확보 */
       font-size: 0.9em;
+      white-space: nowrap;
+      /* 줄바꿈 방지 */
+      min-width: 55px;
+      /* 최소 너비 보장 */
     }
+
 
     .bookmark-entry button.save-btn {
       background-color: #d0e0ff;
@@ -202,21 +209,22 @@
 
     function updateBookmarkList() {
       const container = document.getElementById("bookmarkList");
-      container.innerHTML = '';
+      container.innerHTML = ''; // 초기화
 
       for (let i = 0; i < 5; i++) {
         const value = bookmarks[i] || "";
+
         container.innerHTML += `
-      <div class="bookmark-entry" style="margin-bottom: 8px;">
+      <div class="bookmark-entry">
         <input id="bmInput${i}" 
                type="text" 
                inputmode="numeric" 
                maxlength="3" 
                placeholder="성가번호" 
                value="${value}">
-        <button onclick="saveBookmark(${i})" style="background-color: #d0e0ff;">저장</button>
-        <button onclick="deleteBookmark(${i})" style="background-color: #f0d0d0;">삭제</button>
-        <button onclick="searchFromBookmark(${i})" style="background-color: #aaccee;">검색</button>
+        <button onclick="saveBookmark(${i})" class="save-btn">저장</button>
+        <button onclick="deleteBookmark(${i})" class="delete-btn">삭제</button>
+        <button onclick="searchFromBookmark(${i})" class="search-btn">검색</button>
       </div>`;
       }
     }
