@@ -176,6 +176,26 @@
       renderPages(startPage, endPage);
     }
 
+    function jumpToHymn(numStr) {
+      const matchIndex = hymnIndex.findIndex(item => item.number.toString() === numStr);
+      if (matchIndex === -1) {
+        alert("❌ 해당 성가번호를 찾을 수 없습니다.");
+        return;
+      }
+
+      const startPage = hymnIndex[matchIndex].page;
+      let endPage = pdfDoc.numPages;
+
+      for (let i = matchIndex + 1; i < hymnIndex.length; i++) {
+        if (hymnIndex[i].page > startPage) {
+          endPage = hymnIndex[i].page - 1;
+          break;
+        }
+      }
+
+      renderPages(startPage, endPage);
+    }
+
     function renderPages(startPage, endPage) {
       const viewer = document.getElementById("pdfViewer");
       viewer.innerHTML = '';
@@ -206,7 +226,6 @@
       document.getElementById("bookmarkPopup").style.display = "none";
     }
 
-
     function updateBookmarkList() {
       const container = document.getElementById("bookmarkList");
       container.innerHTML = ''; // 초기화
@@ -215,20 +234,19 @@
         const value = bookmarks[i] || "";
 
         container.innerHTML += `
-      <div class="bookmark-entry">
-        <input id="bmInput${i}" 
-               type="text" 
-               inputmode="numeric" 
-               maxlength="3" 
-               placeholder="성가번호" 
-               value="${value}">
-        <button onclick="saveBookmark(${i})" class="save-btn">저장</button>
-        <button onclick="deleteBookmark(${i})" class="delete-btn">삭제</button>
-        <button onclick="searchFromBookmark(${i})" class="search-btn">검색</button>
-      </div>`;
+        <div class="bookmark-entry">
+          <input id="bmInput${i}" 
+                 type="text" 
+                 inputmode="numeric" 
+                 maxlength="3" 
+                 placeholder="성가번호" 
+                 value="${value}">
+          <button onclick="saveBookmark(${i})" class="save-btn">저장</button>
+          <button onclick="deleteBookmark(${i})" class="delete-btn">삭제</button>
+          <button onclick="searchFromBookmark(${i})" class="search-btn">검색</button>
+        </div>`;
       }
     }
-
 
     function saveBookmark(index) {
       const input = document.getElementById(`bmInput${index}`);
@@ -240,27 +258,20 @@
       }
     }
 
-    function jumpToHymn(numStr) {
-      const matchIndex = hymnIndex.findIndex(item => item.number.toString() === numStr);
-      if (matchIndex === -1) {
-        alert("❌ 해당 성가번호를 찾을 수 없습니다.");
-        return;
-      }
-      const startPage = hymnIndex[matchIndex].page;
-      let endPage = pdfDoc.numPages;
-      for (let i = matchIndex + 1; i < hymnIndex.length; i++) {
-        if (hymnIndex[i].page > startPage) {
-          endPage = hymnIndex[i].page - 1;
-          break;
-        }
-      }
-      renderPages(startPage, endPage);
-    }
-
     function deleteBookmark(index) {
       bookmarks[index] = "";
       saveBookmarks();
       updateBookmarkList();
+    }
+
+    function searchFromBookmark(index) {
+      const input = document.getElementById(`bmInput${index}`);
+      const val = input.value.trim();
+      if (val) {
+        jumpToHymn(val);
+      } else {
+        alert("🔍 검색할 성가번호를 입력해주세요.");
+      }
     }
 
     function saveBookmarks() {
@@ -278,6 +289,7 @@
       loadBookmarks();
     });
   </script>
+
 </body>
 
 </html>
