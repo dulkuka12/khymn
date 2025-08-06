@@ -84,17 +84,37 @@
       padding: 6px;
       font-size: 0.9em;
     }
+
+    .bookmark-entry button.save-btn {
+      background-color: #d0e0ff;
+      /* 연한 파랑 */
+      border: 1px solid #a0c0ff;
+    }
+
+    .bookmark-entry button.delete-btn {
+      background-color: #f0d0d0;
+      /* 연한 빨강 */
+      border: 1px solid #e0a0a0;
+    }
+
+    .bookmark-entry button.search-btn {
+      background-color: #aaccee;
+      /* 약간 진한 파랑 */
+      border: 1px solid #6699cc;
+      font-weight: bold;
+    }
   </style>
 </head>
 
 <body>
+
   <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
     <label for="searchInput">성가 검색</label>
     <input id="searchInput" type="text" inputmode="numeric" placeholder="장수나 제목 입력"
       onkeydown="if (event.key === 'Enter') searchHymn()">
-    <!--<input id="searchInput" type="text" placeholder="장수나 제목 입력" onkeydown="if (event.key === 'Enter') searchHymn()">-->
     <button onclick="openBookmarkPopup()">📌 책갈피</button>
   </div>
+
 
   <div id="bookmarkPopup">
     <button class="closeBtn" onclick="closeBookmarkPopup()">✖</button>
@@ -187,10 +207,16 @@
       for (let i = 0; i < 5; i++) {
         const value = bookmarks[i] || "";
         container.innerHTML += `
-      <div class="bookmark-entry">
-        <input id="bmInput${i}" type="number" inputmode="numeric" maxlength="3" placeholder="성가번호" value="${value}" onkeydown="if(event.key === 'Enter') jumpToHymn(this.value)">
-        <button onclick="saveBookmark(${i})">저장</button>
-        <button onclick="deleteBookmark(${i})">삭제</button>
+      <div class="bookmark-entry" style="margin-bottom: 8px;">
+        <input id="bmInput${i}" 
+               type="text" 
+               inputmode="numeric" 
+               maxlength="3" 
+               placeholder="성가번호" 
+               value="${value}">
+        <button onclick="saveBookmark(${i})" style="background-color: #d0e0ff;">저장</button>
+        <button onclick="deleteBookmark(${i})" style="background-color: #f0d0d0;">삭제</button>
+        <button onclick="searchFromBookmark(${i})" style="background-color: #aaccee;">검색</button>
       </div>`;
       }
     }
