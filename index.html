@@ -14,13 +14,14 @@
     }
     h2 {
       font-size: 1.2em;
-      margin: 0 0 10px 0;
+      margin: 0;
+      display: inline-block;
     }
-    input {
+    #searchInput {
       padding: 6px 10px;
       font-size: 1em;
-      width: 80px;
-      margin-right: 6px;
+      width: 160px;
+      margin-left: 10px;
     }
     button {
       padding: 6px 10px;
@@ -31,10 +32,12 @@
       background: white;
       padding: 10px;
       border: 1px solid #ccc;
+      text-align: center;
     }
     canvas {
-      display: block;
-      margin: auto;
+      display: inline-block;
+      max-width: 100%;
+      height: auto;
       box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     }
     #bookmarkPopup {
@@ -55,11 +58,12 @@
   </style>
 </head>
 <body>
-  <h2>📖 성가 검색</h2>
-  <input id="searchInput" type="text" placeholder="장수나 제목 입력" onkeydown="if (event.key === 'Enter') searchHymn()">
-  <button onclick="searchHymn()">검색</button>
+  <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+    <h2>📖 성가 검색</h2>
+    <input id="searchInput" type="text" placeholder="장수나 제목 입력" onkeydown="if (event.key === 'Enter') searchHymn()">
+  </div>
 
-  <div style="margin-top: 10px;">
+  <div style="margin-top: 10px; margin-bottom: 10px;">
     <button onclick="goToPreviousPage()">⬅️ 이전 페이지</button>
     <button onclick="goToNextPage()">다음 페이지 ➡️</button>
     <button onclick="openBookmarkPopup()">📌 성가 책갈피</button>
@@ -106,7 +110,8 @@
       const match = hymnIndex.find(item => {
         const numberMatch = item.number.toString() === input;
         const titleMatch = item.title.replace(/\s+/g, "").toLowerCase().includes(input);
-        return numberMatch || (!/^\d+$/.test(input) && titleMatch);
+        return numberMatch || (!/^
+\d+$/.test(input) && titleMatch);
       });
 
       if (!match) {
@@ -123,8 +128,7 @@
       const context = canvas.getContext("2d");
 
       pdfDoc.getPage(pageNumber).then(page => {
-        const scale = 1.6;
-        const viewport = page.getViewport({ scale });
+        const viewport = page.getViewport({ scale: 1.6 });
         canvas.width = viewport.width;
         canvas.height = viewport.height;
         page.render({ canvasContext: context, viewport });
@@ -196,7 +200,6 @@
       }
     }
 
-    // 앱 실행 시 자동 불러오기
     window.addEventListener('load', () => {
       loadBookmarks();
     });
