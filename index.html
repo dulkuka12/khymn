@@ -79,7 +79,8 @@
 <body>
   <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
     <label for="searchInput">성가 검색</label>
-    <input id="searchInput" type="text" placeholder="장수나 제목 입력" onkeydown="if (event.key === 'Enter') searchHymn()">
+    <input id="searchInput" type="text" inputmode="numeric" placeholder="장수나 제목 입력"onkeydown="if (event.key === 'Enter') searchHymn()">
+    <!--<input id="searchInput" type="text" placeholder="장수나 제목 입력" onkeydown="if (event.key === 'Enter') searchHymn()">-->
     <button onclick="openBookmarkPopup()">📌 책갈피</button>
   </div>
 
@@ -174,7 +175,7 @@
         const value = bookmarks[i] || "";
         container.innerHTML += `
           <div class="bookmark-entry">
-            <input id="bmInput${i}" value="${value}" maxlength="3" placeholder="성가번호" onkeydown="if(event.key === 'Enter') jumpToHymn(this.value)">
+            <input id="bmInput0" type="number" inputmode="numeric" maxlength="3" placeholder="성가번호" onkeydown="if(event.key === 'Enter') jumpToHymn(this.value)">
             <button onclick="saveBookmark(${i})">저장</button>
             <button onclick="deleteBookmark(${i})">삭제</button>
           </div>`;
