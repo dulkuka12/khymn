@@ -1,6 +1,6 @@
 // service-worker.js
 
-const CACHE_NAME = "khymn-v1.1";
+const CACHE_NAME = "khymn-v1.2";
 const CACHE_FILES = [
   "/khymn/index.html",
   "/khymn/icon-192.png",
