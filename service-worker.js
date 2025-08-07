@@ -3,9 +3,13 @@
 const CACHE_NAME = "khymn-v1.2";
 const CACHE_FILES = [
   "/khymn/index.html",
+//  "/khymn/hymnbook.pdf",
+  "/khymn/hymn-index-final.json",
   "/khymn/icon-192.png",
   "/khymn/icon-512.png",
-  "/khymn/manifest.json"
+  "/khymn/manifest.json",
+  "/khymn/pdfjs/pdf.js",
+  "/khymn/pdfjs/pdf.worker.js"
 ];
 
 // 1️⃣ 설치: 캐시 파일 저장
