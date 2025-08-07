@@ -3,7 +3,7 @@
 
 <head>
 
-<meta charset="UTF-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>성가 2015</title>
 
@@ -115,6 +115,13 @@
       border: 1px solid #6699cc;
       font-weight: bold;
     }
+
+    html,
+    body {
+      overscroll-behavior: contain;
+      /* 당겨서 새로고침 방지 */
+      touch-action: pan-y;
+    }
   </style>
 </head>
 
@@ -152,6 +159,13 @@
     }
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs/pdf.worker.js';
+
+    document.addEventListener('touchmove', function (e) {
+      if (window.scrollY === 0 && e.touches[0].clientY > 5) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
 
     let pdfDoc = null;
     let hymnIndex = [];
