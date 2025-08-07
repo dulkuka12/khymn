@@ -8,6 +8,7 @@ const CACHE_FILES = [
   "/khymn/icon-192.png",
   "/khymn/icon-512.png",
   "/khymn/manifest.json",
+  "/khymn/hymnbook.pdf",
   "/khymn/pdfjs/pdf.js",
   "/khymn/pdfjs/pdf.worker.js"
 ];

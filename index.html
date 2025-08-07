@@ -2,9 +2,14 @@
 <html lang="ko">
 
 <head>
-  <meta charset="UTF-8" />
+
+<meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>성가 2015</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#4b0082" />
+  <link rel="icon" href="icon-192.png" />
 
   <style>
     body {
@@ -133,8 +138,20 @@
   <script src="pdfjs/pdf.js"></script>
 
   <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker
+          .register("/khymn/service-worker.js")
+          .then(function (registration) {
+            console.log("✅ Service Worker 등록 성공:", registration.scope);
+          })
+          .catch(function (error) {
+            console.error("❌ Service Worker 등록 실패:", error);
+          });
+      });
+    }
 
-  //  pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs/pdf.worker.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs/pdf.worker.js';
 
     let pdfDoc = null;
     let hymnIndex = [];
