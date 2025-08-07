@@ -155,24 +155,6 @@
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs/pdf.worker.js';
 
 
-
-
-window.addEventListener("touchstart", function (e) {
-  touchStartY = e.touches[0].clientY;
-}, { passive: true });
-
-window.addEventListener("touchmove", function (e) {
-  const currentY = e.touches[0].clientY;
-
-  // 화면 최상단에서 아래로 스와이프할 때만 막음
-  if (window.scrollY === 0 && currentY > touchStartY + 10) {
-    e.preventDefault();
-  }
-}, { passive: false });
-
-
-
-
     let pdfDoc = null;
     let hymnIndex = [];
     let bookmarks = [];
