@@ -116,12 +116,6 @@
       font-weight: bold;
     }
 
-    html,
-    body {
-      overscroll-behavior: contain;
-      /* 당겨서 새로고침 방지 */
-      /*touch-action: pan-y; */
-    }
   </style>
 </head>
 
@@ -160,11 +154,23 @@
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs/pdf.worker.js';
 
-    document.addEventListener('touchmove', function (e) {
-      if (window.scrollY === 0 && e.touches[0].clientY > 5) {
-        e.preventDefault();
-      }
-    }, { passive: false });
+
+
+
+window.addEventListener("touchstart", function (e) {
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+window.addEventListener("touchmove", function (e) {
+  const currentY = e.touches[0].clientY;
+
+  // 화면 최상단에서 아래로 스와이프할 때만 막음
+  if (window.scrollY === 0 && currentY > touchStartY + 10) {
+    e.preventDefault();
+  }
+}, { passive: false });
+
+
 
 
     let pdfDoc = null;
