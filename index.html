@@ -114,8 +114,7 @@
   <!-- ✅ 한 줄 툴바: [<] [입력칸] [>] [책갈피] -->
   <div class="toolbar">
     <button aria-label="이전 성가" onclick="stepHymn(-1)">‹</button>
-    <input id="searchInput" type="text" placeholder="장수나 제목 입력"
-           onkeydown="if (event.key === 'Enter') searchHymn()">
+    <input id="searchInput" type="text" onkeydown="if (event.key === 'Enter') searchHymn()">
     <button aria-label="다음 성가" onclick="stepHymn(1)">›</button>
     <button onclick="openBookmarkPopup()">📌 책갈피</button>
   </div>
@@ -126,7 +125,9 @@
     <div id="bookmarkList"></div>
   </div>
 
-  <div id="pdfViewer"></div>
+  <div id="pdfViewer" style="text-align:center; color:#777; font-size:1.1em; padding:30px;">
+  🎵 성가번호나 제목을 입력하고 엔터키를 누르세요
+  </div>
 
   <script src="pdfjs/pdf.js"></script>
 
