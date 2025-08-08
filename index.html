@@ -132,6 +132,11 @@
   <script src="pdfjs/pdf.js"></script>
 
   <script>
+
+  window.addEventListener('error', e => alert('JS Error: ' + (e.message || e)));
+  window.addEventListener('unhandledrejection', e => alert('Promise Error: ' + (e.reason && e.reason.message || e.reason)));
+
+
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", function () {
         navigator.serviceWorker
