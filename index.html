@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,12 +26,14 @@
       flex-wrap: nowrap;
       overflow: hidden;
     }
+
     .toolbar button {
       padding: 6px 10px;
       margin: 0;
       flex: 0 0 auto;
       min-width: 36px;
     }
+
     #searchInput {
       padding: 6px 8px;
       font-size: 1em;
@@ -48,23 +51,25 @@
     }
 
     /* 안내문 박스 */
-    .notice-box{
-      display:inline-block;
-      text-align:left;
-      border:1px dashed #bbb;
-      background:#fafafa;
-      padding:18px 20px;
-      border-radius:10px;
-      font-size:1.05em;
-      color:#555;
-      box-shadow:0 1px 4px rgba(0,0,0,0.06);
+    .notice-box {
+      display: inline-block;
+      text-align: left;
+      border: 1px dashed #bbb;
+      background: #fafafa;
+      padding: 18px 20px;
+      border-radius: 10px;
+      font-size: 1.05em;
+      color: #555;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
     }
-    .notice-title{
-      font-weight:700;
-      margin-bottom:6px;
+
+    .notice-title {
+      font-weight: 700;
+      margin-bottom: 6px;
     }
-    .notice-desc{
-      line-height:1.5;
+
+    .notice-desc {
+      line-height: 1.5;
     }
 
     canvas {
@@ -87,6 +92,7 @@
       z-index: 999;
       min-width: 250px;
     }
+
     #bookmarkPopup .closeBtn {
       position: absolute;
       top: 8px;
@@ -96,11 +102,13 @@
       font-size: 18px;
       cursor: pointer;
     }
+
     .bookmark-entry {
       display: flex;
       align-items: center;
       margin-bottom: 8px;
     }
+
     .bookmark-entry input {
       width: 90px;
       padding: 6px;
@@ -108,6 +116,7 @@
       text-align: center;
       border: 1px solid #ccc;
     }
+
     .bookmark-entry button {
       margin-left: 6px;
       padding: 6px 10px;
@@ -115,18 +124,41 @@
       white-space: nowrap;
       min-width: 55px;
     }
-    .bookmark-entry button.save-btn { background-color: #d0e0ff; border: 1px solid #a0c0ff; }
-    .bookmark-entry button.delete-btn { background-color: #f0d0d0; border: 1px solid #e0a0a0; }
-    .bookmark-entry button.search-btn { background-color: #aaccee; border: 1px solid #6699cc; font-weight: bold; }
 
-    html, body { overscroll-behavior: contain; }
+    .bookmark-entry button.save-btn {
+      background-color: #d0e0ff;
+      border: 1px solid #a0c0ff;
+    }
+
+    .bookmark-entry button.delete-btn {
+      background-color: #f0d0d0;
+      border: 1px solid #e0a0a0;
+    }
+
+    .bookmark-entry button.search-btn {
+      background-color: #aaccee;
+      border: 1px solid #6699cc;
+      font-weight: bold;
+    }
+
+    html,
+    body {
+      overscroll-behavior: contain;
+    }
 
     @media (max-width: 360px) {
-      .toolbar button { min-width: 32px; padding: 6px 8px; }
-      #searchInput { min-width: 60px; }
+      .toolbar button {
+        min-width: 32px;
+        padding: 6px 8px;
+      }
+
+      #searchInput {
+        min-width: 60px;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <!-- 한 줄 툴바 -->
@@ -235,12 +267,19 @@
       renderPages(startPage, endPage);
     }
 
+
+
     function jumpToHymn(numStr) {
       const matchIndex = hymnIndex.findIndex(item => item.number.toString() === numStr);
       if (matchIndex === -1) {
         alert("❌ 해당 성가번호를 찾을 수 없습니다.");
         return;
       }
+
+      // ✅ 입력칸을 현재 번호로 갱신
+      document.getElementById("searchInput").value = String(numStr);
+
+      // ✅ 표시된 번호 기억
       lastShownNumber = hymnIndex[matchIndex].number;
 
       const startPage = hymnIndex[matchIndex].page;
@@ -253,6 +292,9 @@
       }
       renderPages(startPage, endPage);
     }
+
+
+
 
     function stepHymn(delta) {
       const inputEl = document.getElementById("searchInput");
@@ -310,12 +352,12 @@
       for (let i = 0; i < 5; i++) {
         const value = bookmarks[i] || "";
         container.innerHTML +=
-        '<div class="bookmark-entry">' +
+          '<div class="bookmark-entry">' +
           '<input id="bmInput' + i + '" type="text" inputmode="numeric" maxlength="3" placeholder="성가번호" value="' + value + '">' +
           '<button onclick="saveBookmark(' + i + ')" class="save-btn">저장</button>' +
           '<button onclick="deleteBookmark(' + i + ')" class="delete-btn">삭제</button>' +
           '<button onclick="searchFromBookmark(' + i + ')" class="search-btn">검색</button>' +
-        '</div>';
+          '</div>';
       }
     }
     function saveBookmark(index) {
@@ -353,4 +395,5 @@
     window.addEventListener('load', () => { loadBookmarks(); });
   </script>
 </body>
+
 </html>
