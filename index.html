@@ -116,6 +116,14 @@
       font-weight: bold;
     }
 
+
+html, body {
+  overscroll-behavior: contain;
+}
+
+
+
+
   </style>
 </head>
 
@@ -153,6 +161,36 @@
     }
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs/pdf.worker.js';
+
+
+
+let touchStartY = 0;
+let touchStartX = 0;
+let isOneFinger = false;
+
+window.addEventListener("touchstart", function (e) {
+  isOneFinger = e.touches.length === 1; // 두 손가락이면 확대 제스처
+  if (isOneFinger) {
+    touchStartY = e.touches[0].clientY;
+    touchStartX = e.touches[0].clientX;
+  }
+}, { passive: true });
+
+window.addEventListener("touchmove", function (e) {
+  if (!isOneFinger) return; // 두 손가락 이상이면 확대 제스처 허용
+
+  const currentY = e.touches[0].clientY;
+  const currentX = e.touches[0].clientX;
+
+  // 위로 스크롤 중이면서, 아래로 쓸어내리는 동작일 때
+  if (window.scrollY === 0 && currentY > touchStartY + 10) {
+    e.preventDefault(); // 새로고침 방지
+  }
+}, { passive: false });
+
+
+
+
 
 
     let pdfDoc = null;
