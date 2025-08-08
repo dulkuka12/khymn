@@ -99,9 +99,9 @@
     .bookmark-entry button.delete-btn { background-color: #f0d0d0; border: 1px solid #e0a0a0; }
     .bookmark-entry button.search-btn { background-color: #aaccee; border: 1px solid #6699cc; font-weight: bold; }
 
-    /* 밑으로 스와이프시 화면갱신 방지 */
+    /* 밑으로 스와이프시 화면갱신 방지 
     html, body { overscroll-behavior: contain; }
-
+    */
     /* 아주 작은 화면에서 터치 여유를 조금 더
     @media (max-width: 360px) {
       .toolbar button { min-width: 32px; padding: 6px 8px; }
@@ -153,7 +153,7 @@
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdfjs/pdf.worker.js';
 
-    /* 밑으로 스와이프시 화면갱신 방지 */
+    /* 밑으로 스와이프시 화면갱신 방지
     let touchStartY = 0;
     let isOneFinger = false;
     window.addEventListener("touchstart", function (e) {
@@ -166,7 +166,7 @@
       if (window.scrollY === 0 && currentY > touchStartY + 10) {
         e.preventDefault();
       }
-    }, { passive: false });
+    }, { passive: false }); */
 
     let pdfDoc = null;
     let hymnIndex = [];
