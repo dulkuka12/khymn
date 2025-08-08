@@ -189,18 +189,45 @@
   <script src="pdfjs/pdf.js"></script>
 
   <script>
+
     if ("serviceWorker" in navigator) {
-      window.addEventListener("load", function () {
-        navigator.serviceWorker
-          .register("./service-worker.js")
-          .then(function (registration) {
-            console.log("✅ Service Worker 등록 성공:", registration.scope);
-          })
-          .catch(function (error) {
-            console.error("❌ Service Worker 등록 실패:", error);
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js").then((reg) => {
+          // 이미 대기 중인 SW가 있으면 바로 안내
+          if (reg.waiting) {
+            promptUpdate(reg);
+          }
+
+          // 새 SW가 설치되면 상태 확인
+          reg.addEventListener("updatefound", () => {
+            const newSW = reg.installing;
+            if (!newSW) return;
+            newSW.addEventListener("statechange", () => {
+              if (newSW.state === "installed" && navigator.serviceWorker.controller) {
+                promptUpdate(reg);
+              }
+            });
           });
+
+          // SW 교체되면 자동 새로고침
+          navigator.serviceWorker.addEventListener("controllerchange", () => {
+            window.location.reload();
+          });
+
+          // (선택) 수동 업데이트 버튼에서 호출할 수 있도록 전역에 노출
+          window.checkForUpdate = () => reg.update();
+        }).catch((err) => {
+          console.error("SW 등록 실패:", err);
+        });
       });
+
+      function promptUpdate(reg) {
+        if (confirm("📢 새 버전이 있습니다. 지금 업데이트할까요?")) {
+          reg.waiting && reg.waiting.postMessage({ type: "SKIP_WAITING" });
+        }
+      }
     }
+
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = './pdfjs/pdf.worker.js';
 
