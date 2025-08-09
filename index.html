@@ -186,7 +186,7 @@
     </div>
   </div>
 
-  <script src="pdfjs/pdf.js"></script>
+  <script src="/khymn/pdfjs/pdf.js"></script>
 
   <script>
 
@@ -231,7 +231,7 @@
       }
     }
 
-    pdfjsLib.GlobalWorkerOptions.workerSrc = './pdfjs/pdf.worker.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/khymn/pdfjs/pdf.worker.js';
 
     // 스와이프 새로고침 방지
     let touchStartY = 0;
@@ -253,7 +253,7 @@
     let bookmarks = [];
     let lastShownNumber = null;
 
-    pdfjsLib.getDocument("./hymnbook.pdf").promise.then(doc => {
+    pdfjsLib.getDocument("/khymn/hymnbook.pdf").promise.then(doc => {
       pdfDoc = doc;
     });
 
