@@ -323,8 +323,6 @@
     }
 
 
-
-
     function stepHymn(delta) {
       const inputEl = document.getElementById("searchInput");
       const raw = inputEl.value.trim();
@@ -423,7 +421,7 @@
     }
     window.addEventListener('load', () => { loadBookmarks(); });
 
-/*추가부분*/
+    /*추가부분*/
     self.addEventListener("message", (event) => {
       if (event.data && event.data.type === "SKIP_WAITING") {
         self.skipWaiting();
