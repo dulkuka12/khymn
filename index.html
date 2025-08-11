@@ -412,9 +412,9 @@
       const value = bookmarks[i] || "";
       container.innerHTML +=
         '<div class="bookmark-entry">' +
+        '<button onclick="deleteBookmark(' + i + ')" class="delete-btn">삭제</button>' +
         '<input id="bmInput' + i + '" type="text" inputmode="numeric" maxlength="3" placeholder="성가번호" value="' + value + '">' +
         '<button onclick="saveBookmark(' + i + ')" class="save-btn">저장</button>' +
-        '<button onclick="deleteBookmark(' + i + ')" class="delete-btn">삭제</button>' +
         '<button onclick="searchFromBookmark(' + i + ')" class="search-btn">검색</button>' +
         '</div>';
     }
