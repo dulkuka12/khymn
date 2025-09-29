@@ -35,8 +35,7 @@
     }
 
     .toolbar button:last-child {
-      margin-left: 14px;
-      /* 책갈피 버튼 왼쪽 여백 */
+      margin-left: 14px; /* 책갈피 버튼 왼쪽 여백 */
     }
 
     #searchInput {
@@ -148,8 +147,7 @@
       font-weight: bold;
     }
 
-    html,
-    body {
+    html, body {
       overscroll-behavior: contain;
     }
 
@@ -158,7 +156,6 @@
         min-width: 32px;
         padding: 6px 8px;
       }
-
       #searchInput {
         min-width: 60px;
       }
@@ -193,6 +190,7 @@
     </div>
   </div>
 
+  <!-- pdf.js -->
   <script src="/khymn/pdfjs/pdf.js"></script>
 
   <script>
@@ -230,17 +228,17 @@
       }
     }
 
-    /**** 2) PDF.js 워커/리소스 경로: 절대경로로 고정 ****/
+    /**** 2) 경로 상수 ****/
     const WORKER_URL = '/khymn/pdfjs/pdf.worker.js';
-    const PDF_URL = '/khymn/hymnbook.pdf';
-    const INDEX_URL = '/khymn/hymn-index-final.json';
-    const BOOKMARKS_KEY = 'khymn-bookmarks'; // (신규 키)
+    const PDF_URL    = '/khymn/hymnbook.pdf';
+    const INDEX_URL  = '/khymn/hymn-index-final.json';
+    const BOOKMARKS_KEY = 'khymn-bookmarks';
 
     if (window.pdfjsLib) {
       pdfjsLib.GlobalWorkerOptions.workerSrc = WORKER_URL;
     }
 
-    /**** 3) 스와이프 새로고침 방지(기존 그대로) ****/
+    /**** 3) 스와이프 새로고침 방지 ****/
     let touchStartY = 0;
     let isOneFinger = false;
     window.addEventListener("touchstart", function (e) {
@@ -255,83 +253,86 @@
       }
     }, { passive: false });
 
-    /**** 4) 상태 변수 ****/
+    /**** 4) 전역 상태 변수 ****/
     let pdfDoc = null;
     let hymnIndex = [];
-    let _initDone = false;
-    let _initPromise = null;
+    let indexLoaded = false;
+    let bookmarks = [];          // ✅ 전역 선언
+    let lastShownNumber = null;  // ✅ 전역 선언
 
+    /**** 5) 초기화 ****/
     async function initOnce() {
-      if (_initDone) return;
-      if (_initPromise) return _initPromise;
-
-      _initPromise = (async () => {
-        // 1) PDF.js 워커 경로 (로컬 테스트 필수)
+      if (window.pdfjsLib && !pdfjsLib.GlobalWorkerOptions.workerSrc) {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = WORKER_URL;
+      }
+      if (!pdfDoc) {
+        pdfDoc = await pdfjsLib.getDocument(PDF_URL).promise;
+      }
+      if (!indexLoaded) {
+        const res = await fetch(INDEX_URL, { cache: 'no-store' });
+        const txt = await res.text();
         try {
-          pdfjsLib.GlobalWorkerOptions.workerSrc = "./pdfjs/pdf.worker.js";
-        } catch (e) {
-          console.warn("PDF.js not loaded yet?", e);
+          hymnIndex = JSON.parse(txt);
+        } catch (err) {
+          console.error("JSON parse error in hymn-index-final.json:", err);
+          console.error("Preview:", txt.slice(0, 200));
+          throw err;
         }
-
-        // 2) PDF와 인덱스를 동시에 로드
-        const [doc, idx] = await Promise.all([
-          pdfjsLib.getDocument("./hymnbook.pdf").promise,
-          fetch("./hymn-index-final.json").then(r => {
-            if (!r.ok) throw new Error(`index fetch ${r.status}`);
-            return r.text(); // ← 일단 텍스트로 받아서
-          }).then(txt => {
-            // JSON 파싱 오류를 콘솔에서 보기 좋게
-            try {
-              return JSON.parse(txt);
-            } catch (err) {
-              console.error("JSON parse error in hymn-index-final.json:", err);
-              console.error("Offending text preview (first 200 chars):", txt.slice(0, 200));
-              throw err;
-            }
-          })
-        ]);
-
-        pdfDoc = doc;
-        hymnIndex = idx;
-
-        // 최소 유효성 검사
-        if (!Array.isArray(hymnIndex) || hymnIndex.length === 0) {
-          throw new Error("hymnIndex is empty or not an array");
-        }
-      })();
-
-      try {
-        await _initPromise;
-        _initDone = true;
-      } catch (err) {
-        console.error("initOnce() failed:", err);
-        throw err; // searchHymn에서 catch되어 안내창이 뜸
+        indexLoaded = true;
       }
     }
+
+    document.addEventListener('visibilitychange', async () => {
+      if (document.visibilityState === 'visible') {
+        try { await initOnce(); } catch (e) { console.error('re-init failed', e); }
+      }
+    });
+
+    window.addEventListener('pageshow', async (e) => {
+      if (e.persisted || !pdfDoc || !indexLoaded) {
+        try { await initOnce(); } catch (e) { console.error('re-init failed', e); }
+      }
+    });
+
+    window.addEventListener('load', async () => {
+      migrateOldBookmarksKey(); // 구 키 -> 신 키 마이그레이션(1회)
+      loadBookmarks();          // 북마크 로드 및 배열 길이 보정
+      try { await initOnce(); } catch (e) { console.error('init failed', e); }
+    });
 
     /**** 6) 유틸 ****/
     function hymnExists(num) {
-      return hymnIndex.some(item => item.number === num);
+      return hymnIndex.some(item => Number(item.number) === Number(num));
     }
 
-    /**** 7) 검색 ****/
-    async function searchHymn() {
-      try { await initOnce(); } catch {
-        alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.');
-        return;
+    function computeEndPageByIndex(matchIndex, startPage) {
+      const item = hymnIndex[matchIndex];
+      // 1) end 명시 시 최우선
+      if (item && Number.isFinite(Number(item.end))) {
+        return Number(item.end);
       }
+      // 2) 다음 항목 시작 전까지
+      const next = hymnIndex[matchIndex + 1];
+      if (next && Number.isFinite(Number(next.page)) && Number(next.page) > startPage) {
+        return Number(next.page) - 1;
+      }
+      // 3) 마지막까지
+      return pdfDoc ? pdfDoc.numPages : startPage;
+    }
+
+    /**** 7) 검색 (번호/제목) ****/
+    async function searchHymn() {
+      try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
 
       const inputRaw = document.getElementById("searchInput").value.trim();
       const input = inputRaw.toLowerCase().replace(/\s+/g, "");
       if (!input || !pdfDoc || hymnIndex.length === 0) return;
 
-      // 숫자 → number 정확일치, 문자열 → title 부분일치(공백 무시)
       const matchIndex = hymnIndex.findIndex(item => {
-        const numberMatch = item.number.toString() === input;
-        const titleMatch =
-          !/^\d+$/.test(input) &&
-          String(item.title || "").replace(/\s+/g, "").toLowerCase().includes(input);
-        return numberMatch || titleMatch;
+        const numberMatch = String(item.number) === input;
+        const titleStr = String(item.title || "");
+        const titleMatch = titleStr.replace(/\s+/g, "").toLowerCase().includes(input);
+        return numberMatch || (!/^\d+$/.test(input) && titleMatch);
       });
 
       if (matchIndex === -1) {
@@ -342,56 +343,41 @@
       const item = hymnIndex[matchIndex];
       lastShownNumber = item.number;
 
-      // 시작 페이지
       const startPage = Number(item.page);
       if (!Number.isFinite(startPage)) {
         alert("⚠️ 인덱스의 page 값이 올바르지 않습니다.");
         return;
       }
 
-      // 끝 페이지 결정: 1) end가 있으면 그 값, 2) 없으면 다음 곡 시작 전까지
-      let endPage;
-      if (Number.isFinite(Number(item.end))) {
-        endPage = Number(item.end);
-      } else {
-        // 다음 항목의 시작 페이지 - 1 (없으면 PDF 마지막 페이지)
-        const next = hymnIndex[matchIndex + 1];
-        if (next && Number.isFinite(Number(next.page)) && Number(next.page) > startPage) {
-          endPage = Number(next.page) - 1;
-        } else {
-          endPage = pdfDoc.numPages;
-        }
-      }
-
-      // 안전 범위 보정
+      let endPage = computeEndPageByIndex(matchIndex, startPage);
       endPage = Math.max(startPage, Math.min(endPage, pdfDoc.numPages));
 
-      // 두 페이지 이상인 경우도 연속 렌더
       renderPages(startPage, endPage);
     }
-
 
     /**** 8) 번호로 점프 ****/
     async function jumpToHymn(numStr) {
       try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
 
-      const matchIndex = hymnIndex.findIndex(item => item.number.toString() === numStr);
+      const matchIndex = hymnIndex.findIndex(item => String(item.number) === String(numStr));
       if (matchIndex === -1) {
         alert("❌ 해당 성가번호를 찾을 수 없습니다.");
         return;
       }
 
       document.getElementById("searchInput").value = String(numStr);
-      lastShownNumber = hymnIndex[matchIndex].number;
+      const item = hymnIndex[matchIndex];
+      lastShownNumber = item.number;
 
-      const startPage = hymnIndex[matchIndex].page;
-      let endPage = pdfDoc.numPages;
-      for (let i = matchIndex + 1; i < hymnIndex.length; i++) {
-        if (hymnIndex[i].page > startPage) {
-          endPage = hymnIndex[i].page - 1;
-          break;
-        }
+      const startPage = Number(item.page);
+      if (!Number.isFinite(startPage)) {
+        alert("⚠️ 인덱스의 page 값이 올바르지 않습니다.");
+        return;
       }
+
+      let endPage = computeEndPageByIndex(matchIndex, startPage);
+      endPage = Math.max(startPage, Math.min(endPage, pdfDoc.numPages));
+
       renderPages(startPage, endPage);
     }
 
@@ -423,22 +409,25 @@
     }
 
     /**** 10) PDF 렌더 ****/
-    function renderPages(startPage, endPage) {
+    async function renderPages(startPage, endPage) {
       if (!pdfDoc) return;
       const viewer = document.getElementById("pdfViewer");
       viewer.innerHTML = '';
+
+      // 순서대로 렌더(화면 깜빡임/순서 섞임 방지)
       for (let pageNum = startPage; pageNum <= endPage; pageNum++) {
-        pdfDoc.getPage(pageNum).then(page => {
-          const scale = 1.6;
-          const viewport = page.getViewport({ scale });
-          const canvas = document.createElement("canvas");
-          const context = canvas.getContext("2d");
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-          page.render({ canvasContext: context, viewport });
-          viewer.appendChild(canvas);
-        });
+        const page = await pdfDoc.getPage(pageNum);
+        const scale = 1.6;
+        const viewport = page.getViewport({ scale });
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        await page.render({ canvasContext: context, viewport }).promise;
+        viewer.appendChild(canvas);
       }
+      // (선택) 맨 위로 스크롤
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
     /**** 11) 책갈피 ****/
@@ -452,6 +441,11 @@
     }
 
     function updateBookmarkList() {
+      // 길이 5 보장
+      if (!Array.isArray(bookmarks)) bookmarks = [];
+      while (bookmarks.length < 5) bookmarks.push("");
+      if (bookmarks.length > 5) bookmarks = bookmarks.slice(0, 5);
+
       const container = document.getElementById("bookmarkList");
       container.innerHTML = '';
       for (let i = 0; i < 5; i++) {
@@ -472,6 +466,8 @@
         bookmarks[index] = val;
         saveBookmarks();
         updateBookmarkList();
+      } else {
+        alert("성가번호(숫자 1~3자리)만 저장할 수 있습니다.");
       }
     }
     function deleteBookmark(index) {
@@ -484,6 +480,7 @@
       const val = input.value.trim();
       if (val) {
         jumpToHymn(val);
+        closeBookmarkPopup(); // 선택 시 닫기(원하시면 제거)
       } else {
         alert("🔍 검색할 성가번호를 입력해주세요.");
       }
@@ -492,10 +489,14 @@
       localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
     }
     function loadBookmarks() {
-      const saved = localStorage.getItem(BOOKMARKS_KEY);
-      if (saved) {
-        bookmarks = JSON.parse(saved);
+      try {
+        const saved = localStorage.getItem(BOOKMARKS_KEY);
+        bookmarks = saved ? JSON.parse(saved) : [];
+      } catch {
+        bookmarks = [];
       }
+      while (bookmarks.length < 5) bookmarks.push("");
+      if (bookmarks.length > 5) bookmarks = bookmarks.slice(0, 5);
     }
     function migrateOldBookmarksKey() {
       const old = localStorage.getItem("hymnBookmarks"); // 예전 키 호환
@@ -505,8 +506,17 @@
       }
     }
 
+    // (안전) 인라인 onclick을 위해 전역 바인딩
+    window.openBookmarkPopup  = openBookmarkPopup;
+    window.closeBookmarkPopup = closeBookmarkPopup;
+    window.saveBookmark       = saveBookmark;
+    window.deleteBookmark     = deleteBookmark;
+    window.searchFromBookmark = searchFromBookmark;
+    window.searchHymn         = searchHymn;
+    window.jumpToHymn         = jumpToHymn;
+    window.stepHymn           = stepHymn;
+
   </script>
 
 </body>
-
 </html>
