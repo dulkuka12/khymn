@@ -188,7 +188,8 @@
       <div class="notice-title">🎵 성가 검색 안내</div>
       <div class="notice-desc">
         성가번호나 제목을 입력하고 <b>Enter</b> 키를 누르세요.<br>
-        좌우 화살표 버튼으로 <b>이전/다음 성가</b>로도 이동할 수 있습니다.<br>
+        성가번호로 검색 후에는 좌우 화살표 버튼으로 <b>이전/다음 성가</b>로 이동할 수 있습니다.<br>
+        제목의 일부 단어로 검색 후에는 좌우 화살표 버튼으로 같은 단어를 가진 <b>이전/다음 성가</b>로 이동할 수 있습니다.<br>
         전례성가(1-93번)는 곡제목이, 일반 성가(101-661번)는 첫줄 가사가 제목이 됩니다.
       </div>
     </div>
@@ -269,8 +270,6 @@
     let lastQueryIsNumeric = true;   // 마지막 검색이 숫자였는지 여부
     let lastTitleMatchIndices = [];  // 제목 일치하는 hymnIndex의 인덱스 목록
     let lastTitleMatchPos = -1;      // 목록 내 현재 위치(0 기반)
-
-
 
     /**** 5) 초기화 ****/
     async function initOnce() {
@@ -393,45 +392,6 @@
       }
     }
 
-
-    /*
-        //7) 검색 (번호/제목) 
-        async function searchHymn() {
-          try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
-    
-          const inputRaw = document.getElementById("searchInput").value.trim();
-          const input = inputRaw.toLowerCase().replace(/\s+/g, "");
-          if (!input || !pdfDoc || hymnIndex.length === 0) return;
-    
-          const matchIndex = hymnIndex.findIndex(item => {
-            const numberMatch = String(item.number) === input;
-            const titleStr = String(item.title || "");
-            const titleMatch = titleStr.replace(/\s+/g, "").toLowerCase().includes(input);
-            return numberMatch || (!/^\d+$/.test(input) && titleMatch);
-          });
-    
-          if (matchIndex === -1) {
-            alert("❌ 해당 성가를 찾을 수 없습니다.");
-            return;
-          }
-    
-          const item = hymnIndex[matchIndex];
-          lastShownNumber = item.number;
-    
-          const startPage = Number(item.page);
-          if (!Number.isFinite(startPage)) {
-            alert("⚠️ 인덱스의 page 값이 올바르지 않습니다.");
-            return;
-          }
-    
-          let endPage = computeEndPageByIndex(matchIndex, startPage);
-          endPage = Math.max(startPage, Math.min(endPage, pdfDoc.numPages));
-    
-          renderPages(startPage, endPage);
-        }
-    */
-
-
     /**** 8) 번호로 점프 ****/
     async function jumpToHymn(numStr) {
       /* 제목 검색 상태 초기화*/
@@ -439,7 +399,7 @@
       lastQueryText = "";
       lastTitleMatchIndices = [];
       lastTitleMatchPos = -1;
-      
+
       try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
 
       const matchIndex = hymnIndex.findIndex(item => String(item.number) === String(numStr));
