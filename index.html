@@ -300,11 +300,14 @@
       try { await initOnce(); } catch (e) { console.error('init failed', e); }
     });
 
-    /**** 6) 유틸 
+    /* 6) 유틸 */
     function hymnExists(num) {
       return hymnIndex.some(item => Number(item.number) === Number(num));
     }
 
+
+
+    
     function computeEndPageByIndex(matchIndex, startPage) {
       const item = hymnIndex[matchIndex];
       // 1) end 명시 시 최우선
@@ -319,8 +322,8 @@
       // 3) 마지막까지
       return pdfDoc ? pdfDoc.numPages : startPage;
     }
-*/
 
+/*
 
 // ☆ 안전판: 현재 곡에 end가 있으면 그 범위, 없으면
 //  - 같은 page에서 다음 곡 시작 → 1페이지만
@@ -365,7 +368,7 @@ function computeEndPageByIndex(matchIndex, startPage) {
 }
 
 
-
+*/
 
 
 
