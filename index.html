@@ -188,7 +188,8 @@
       <div class="notice-title">🎵 성가 검색 안내</div>
       <div class="notice-desc">
         성가번호나 제목을 입력하고 <b>Enter</b> 키를 누르세요.<br>
-        좌우 화살표 버튼으로 <b>이전/다음 성가</b>로도 이동할 수 있습니다.
+        좌우 화살표 버튼으로 <b>이전/다음 성가</b>로도 이동할 수 있습니다.<br>
+        전례성가는 곡제목으로 일반 성가는 첫줄 가사가 제목이 됩니다.
       </div>
     </div>
   </div>
@@ -263,11 +264,11 @@
     let bookmarks = [];          // ✅ 전역 선언
     let lastShownNumber = null;  // ✅ 전역 선언
 
-// 제목 검색 내비게이션 상태
-let lastQueryText = "";          // 마지막 검색어(문자 검색일 때)
-let lastQueryIsNumeric = true;   // 마지막 검색이 숫자였는지 여부
-let lastTitleMatchIndices = [];  // 제목 일치하는 hymnIndex의 인덱스 목록
-let lastTitleMatchPos = -1;      // 목록 내 현재 위치(0 기반)
+    // 제목 검색 내비게이션 상태
+    let lastQueryText = "";          // 마지막 검색어(문자 검색일 때)
+    let lastQueryIsNumeric = true;   // 마지막 검색이 숫자였는지 여부
+    let lastTitleMatchIndices = [];  // 제목 일치하는 hymnIndex의 인덱스 목록
+    let lastTitleMatchPos = -1;      // 목록 내 현재 위치(0 기반)
 
 
 
@@ -349,99 +350,99 @@ let lastTitleMatchPos = -1;      // 목록 내 현재 위치(0 기반)
       return pdfDoc ? pdfDoc.numPages : startPage;
     }
 
-// 7) 검색 (번호/제목) 
-async function searchHymn() {
-  try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
-
-  const inputRaw = document.getElementById("searchInput").value.trim();
-  const qNorm = normalize(inputRaw);
-  if (!qNorm || !pdfDoc || hymnIndex.length === 0) return;
-
-  const isNumeric = /^\d+$/.test(qNorm);
-  lastQueryIsNumeric = isNumeric;
-
-  if (isNumeric) {
-    // 숫자 검색: 번호 정확 일치
-    const matchIndex = hymnIndex.findIndex(it => String(it.number) === qNorm);
-    if (matchIndex === -1) { alert("❌ 해당 성가 번호를 찾을 수 없습니다."); return; }
-
-    // 제목 검색 상태 초기화
-    lastQueryText = "";
-    lastTitleMatchIndices = [];
-    lastTitleMatchPos = -1;
-
-    navigateToIndex(matchIndex);
-  } else {
-    // 제목 검색: 제목에 qNorm 포함되는 전체 목록 생성
-    lastQueryText = inputRaw; // 입력 그대로 보존(대소문자/띄어쓰기 포함)
-    const q = qNorm;
-
-    lastTitleMatchIndices = hymnIndex
-      .map((it, idx) => ({ idx, titleN: normalize(it.title) }))
-      .filter(o => o.titleN.includes(q))
-      .map(o => o.idx);
-
-    if (lastTitleMatchIndices.length === 0) {
-      alert("❌ 해당 단어를 포함한 성가 제목이 없습니다.");
-      return;
-    }
-
-    // 첫 번째 일치로 이동
-    lastTitleMatchPos = 0;
-    navigateToIndex(lastTitleMatchIndices[0]);
-  }
-}
-
-
-/*
-    //7) 검색 (번호/제목) 
+    // 7) 검색 (번호/제목) 
     async function searchHymn() {
       try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
 
       const inputRaw = document.getElementById("searchInput").value.trim();
-      const input = inputRaw.toLowerCase().replace(/\s+/g, "");
-      if (!input || !pdfDoc || hymnIndex.length === 0) return;
+      const qNorm = normalize(inputRaw);
+      if (!qNorm || !pdfDoc || hymnIndex.length === 0) return;
 
-      const matchIndex = hymnIndex.findIndex(item => {
-        const numberMatch = String(item.number) === input;
-        const titleStr = String(item.title || "");
-        const titleMatch = titleStr.replace(/\s+/g, "").toLowerCase().includes(input);
-        return numberMatch || (!/^\d+$/.test(input) && titleMatch);
-      });
+      const isNumeric = /^\d+$/.test(qNorm);
+      lastQueryIsNumeric = isNumeric;
 
-      if (matchIndex === -1) {
-        alert("❌ 해당 성가를 찾을 수 없습니다.");
-        return;
+      if (isNumeric) {
+        // 숫자 검색: 번호 정확 일치
+        const matchIndex = hymnIndex.findIndex(it => String(it.number) === qNorm);
+        if (matchIndex === -1) { alert("❌ 해당 성가 번호를 찾을 수 없습니다."); return; }
+
+        // 제목 검색 상태 초기화
+        lastQueryText = "";
+        lastTitleMatchIndices = [];
+        lastTitleMatchPos = -1;
+
+        navigateToIndex(matchIndex);
+      } else {
+        // 제목 검색: 제목에 qNorm 포함되는 전체 목록 생성
+        lastQueryText = inputRaw; // 입력 그대로 보존(대소문자/띄어쓰기 포함)
+        const q = qNorm;
+
+        lastTitleMatchIndices = hymnIndex
+          .map((it, idx) => ({ idx, titleN: normalize(it.title) }))
+          .filter(o => o.titleN.includes(q))
+          .map(o => o.idx);
+
+        if (lastTitleMatchIndices.length === 0) {
+          alert("❌ 해당 단어를 포함한 성가 제목이 없습니다.");
+          return;
+        }
+
+        // 첫 번째 일치로 이동
+        lastTitleMatchPos = 0;
+        navigateToIndex(lastTitleMatchIndices[0]);
       }
-
-      const item = hymnIndex[matchIndex];
-      lastShownNumber = item.number;
-
-      const startPage = Number(item.page);
-      if (!Number.isFinite(startPage)) {
-        alert("⚠️ 인덱스의 page 값이 올바르지 않습니다.");
-        return;
-      }
-
-      let endPage = computeEndPageByIndex(matchIndex, startPage);
-      endPage = Math.max(startPage, Math.min(endPage, pdfDoc.numPages));
-
-      renderPages(startPage, endPage);
     }
-*/
+
+
+    /*
+        //7) 검색 (번호/제목) 
+        async function searchHymn() {
+          try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
+    
+          const inputRaw = document.getElementById("searchInput").value.trim();
+          const input = inputRaw.toLowerCase().replace(/\s+/g, "");
+          if (!input || !pdfDoc || hymnIndex.length === 0) return;
+    
+          const matchIndex = hymnIndex.findIndex(item => {
+            const numberMatch = String(item.number) === input;
+            const titleStr = String(item.title || "");
+            const titleMatch = titleStr.replace(/\s+/g, "").toLowerCase().includes(input);
+            return numberMatch || (!/^\d+$/.test(input) && titleMatch);
+          });
+    
+          if (matchIndex === -1) {
+            alert("❌ 해당 성가를 찾을 수 없습니다.");
+            return;
+          }
+    
+          const item = hymnIndex[matchIndex];
+          lastShownNumber = item.number;
+    
+          const startPage = Number(item.page);
+          if (!Number.isFinite(startPage)) {
+            alert("⚠️ 인덱스의 page 값이 올바르지 않습니다.");
+            return;
+          }
+    
+          let endPage = computeEndPageByIndex(matchIndex, startPage);
+          endPage = Math.max(startPage, Math.min(endPage, pdfDoc.numPages));
+    
+          renderPages(startPage, endPage);
+        }
+    */
 
 
     /**** 8) 번호로 점프 ****/
     async function jumpToHymn(numStr) {
       try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
 
-/* 제목 검색 상태 초기화
-lastQueryIsNumeric = true;
-lastQueryText = "";
-lastTitleMatchIndices = [];
-lastTitleMatchPos = -1;
-*/
-const matchIndex = hymnIndex.findIndex(item => String(item.number) === String(numStr));
+      /* 제목 검색 상태 초기화
+      lastQueryIsNumeric = true;
+      lastQueryText = "";
+      lastTitleMatchIndices = [];
+      lastTitleMatchPos = -1;
+      */
+      const matchIndex = hymnIndex.findIndex(item => String(item.number) === String(numStr));
       if (matchIndex === -1) {
         alert("❌ 해당 성가번호를 찾을 수 없습니다.");
         return;
@@ -464,51 +465,51 @@ const matchIndex = hymnIndex.findIndex(item => String(item.number) === String(nu
     }
 
     /**** 9) 이전/다음 ****/
- async function stepHymn(delta) {
-  try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
+    async function stepHymn(delta) {
+      try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
 
-  if (!lastQueryIsNumeric) {
-    // 제목 검색 모드: 일치 목록 내에서 이동
-    if (!Array.isArray(lastTitleMatchIndices) || lastTitleMatchIndices.length === 0) {
-      alert("먼저 제목으로 검색해 주세요.");
-      return;
+      if (!lastQueryIsNumeric) {
+        // 제목 검색 모드: 일치 목록 내에서 이동
+        if (!Array.isArray(lastTitleMatchIndices) || lastTitleMatchIndices.length === 0) {
+          alert("먼저 제목으로 검색해 주세요.");
+          return;
+        }
+        let nextPos = lastTitleMatchPos + (delta > 0 ? 1 : -1);
+        if (nextPos < 0 || nextPos >= lastTitleMatchIndices.length) {
+          alert(delta > 0 ? "마지막 일치 항목입니다." : "첫 번째 일치 항목입니다.");
+          return;
+        }
+        lastTitleMatchPos = nextPos;
+        const idx = lastTitleMatchIndices[lastTitleMatchPos];
+        // 입력창은 단어 그대로 유지
+        // document.getElementById("searchInput").value = lastQueryText;
+        navigateToIndex(idx);
+        return;
+      }
+
+      // 숫자 검색 모드: 기존 로직(번호 ±1)
+      const inputEl = document.getElementById("searchInput");
+      const raw = (inputEl.value || "").trim();
+      let base = Number(raw);
+      if (!Number.isFinite(base)) {
+        if (lastShownNumber != null) base = Number(lastShownNumber);
+        else { alert("먼저 성가 번호를 입력 검색해 주세요."); return; }
+      }
+
+      const next = base + (delta > 0 ? 1 : -1);
+      if (!hymnExists(next)) { alert("❌ 해당 성가가 없는 번호입니다."); return; }
+
+      inputEl.value = String(next); // 숫자 모드에선 입력 칸도 업데이트
+      const matchIndex = hymnIndex.findIndex(it => Number(it.number) === next);
+      if (matchIndex === -1) { alert("❌ 해당 성가번호를 찾을 수 없습니다."); return; }
+
+      // 제목 검색 상태 초기화
+      lastQueryText = "";
+      lastTitleMatchIndices = [];
+      lastTitleMatchPos = -1;
+
+      navigateToIndex(matchIndex);
     }
-    let nextPos = lastTitleMatchPos + (delta > 0 ? 1 : -1);
-    if (nextPos < 0 || nextPos >= lastTitleMatchIndices.length) {
-      alert(delta > 0 ? "마지막 일치 항목입니다." : "첫 번째 일치 항목입니다.");
-      return;
-    }
-    lastTitleMatchPos = nextPos;
-    const idx = lastTitleMatchIndices[lastTitleMatchPos];
-    // 입력창은 단어 그대로 유지
-    // document.getElementById("searchInput").value = lastQueryText;
-    navigateToIndex(idx);
-    return;
-  }
-
-  // 숫자 검색 모드: 기존 로직(번호 ±1)
-  const inputEl = document.getElementById("searchInput");
-  const raw = (inputEl.value || "").trim();
-  let base = Number(raw);
-  if (!Number.isFinite(base)) {
-    if (lastShownNumber != null) base = Number(lastShownNumber);
-    else { alert("먼저 성가 번호를 입력 검색해 주세요."); return; }
-  }
-
-  const next = base + (delta > 0 ? 1 : -1);
-  if (!hymnExists(next)) { alert("❌ 해당 성가가 없는 번호입니다."); return; }
-
-  inputEl.value = String(next); // 숫자 모드에선 입력 칸도 업데이트
-  const matchIndex = hymnIndex.findIndex(it => Number(it.number) === next);
-  if (matchIndex === -1) { alert("❌ 해당 성가번호를 찾을 수 없습니다."); return; }
-
-  // 제목 검색 상태 초기화
-  lastQueryText = "";
-  lastTitleMatchIndices = [];
-  lastTitleMatchPos = -1;
-
-  navigateToIndex(matchIndex);
-}
 
     /**** 10) PDF 렌더 ****/
     async function renderPages(startPage, endPage) {
@@ -613,26 +614,26 @@ const matchIndex = hymnIndex.findIndex(item => String(item.number) === String(nu
       }
     }
 
-function normalize(str) {
-  return String(str || "").replace(/\s+/g, "").toLowerCase();
-}
+    function normalize(str) {
+      return String(str || "").replace(/\s+/g, "").toLowerCase();
+    }
 
-function navigateToIndex(matchIndex) {
-  const item = hymnIndex[matchIndex];
-  if (!item) return;
+    function navigateToIndex(matchIndex) {
+      const item = hymnIndex[matchIndex];
+      if (!item) return;
 
-  lastShownNumber = item.number;
+      lastShownNumber = item.number;
 
-  const startPage = Number(item.page);
-  if (!Number.isFinite(startPage)) {
-    alert("⚠️ 인덱스의 page 값이 올바르지 않습니다.");
-    return;
-  }
+      const startPage = Number(item.page);
+      if (!Number.isFinite(startPage)) {
+        alert("⚠️ 인덱스의 page 값이 올바르지 않습니다.");
+        return;
+      }
 
-  let endPage = computeEndPageByIndex(matchIndex, startPage);
-  endPage = Math.max(startPage, Math.min(endPage, pdfDoc.numPages));
-  renderPages(startPage, endPage);
-}
+      let endPage = computeEndPageByIndex(matchIndex, startPage);
+      endPage = Math.max(startPage, Math.min(endPage, pdfDoc.numPages));
+      renderPages(startPage, endPage);
+    }
 
 
     // (안전) 인라인 onclick을 위해 전역 바인딩
