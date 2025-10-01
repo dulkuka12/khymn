@@ -316,13 +316,6 @@
       return hymnIndex.some(item => Number(item.number) === Number(num));
     }
 
-function resetTitleSearchState() {
-  lastQueryIsNumeric = true;     // ← 숫자 모드로 전환
-  lastQueryText = "";
-  lastTitleMatchIndices = [];
-  lastTitleMatchPos = -1;
-}
-
     //★ 교체: 같은 page 그룹이더라도 '현재 곡'에 end가 없으면 1페이지만
     function computeEndPageByIndex(matchIndex, startPage) {
       const cur = hymnIndex[matchIndex];
@@ -355,12 +348,6 @@ function resetTitleSearchState() {
       return pdfDoc ? pdfDoc.numPages : startPage;
     }
 
- const inputEl = document.getElementById("searchInput");
-inputEl.addEventListener("input", () => {
-  if (inputEl.value.trim() === "") {
-    resetTitleSearchState();     // 빈 입력 → 즉시 숫자 모드
-  }
-});
    // 7) 검색 (번호/제목) 
     async function searchHymn() {
       try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
@@ -439,17 +426,7 @@ inputEl.addEventListener("input", () => {
     /**** 9) 이전/다음 ****/
     async function stepHymn(delta) {
       try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
-
-  const inputEl = document.getElementById("searchInput");
-  const raw = (inputEl.value || "").trim();
-
-  if (raw === "") {
-    resetTitleSearchState();     // 빈 입력일 때는 무조건 숫자 모드로
-  }
-
-
-
-      
+   
       if (!lastQueryIsNumeric) {
         // 제목 검색 모드: 일치 목록 내에서 이동
         if (!Array.isArray(lastTitleMatchIndices) || lastTitleMatchIndices.length === 0) {
@@ -634,6 +611,7 @@ inputEl.addEventListener("input", () => {
 
 
 </html>
+
 
 
 
