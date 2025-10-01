@@ -394,11 +394,11 @@
 
     /**** 8) 번호로 점프 ****/
     async function jumpToHymn(numStr) {
-      /* 제목 검색 상태 초기화
+      /* 제목 검색 상태 초기화 */
       lastQueryIsNumeric = true;
       lastQueryText = "";
       lastTitleMatchIndices = [];
-      lastTitleMatchPos = -1; */
+      lastTitleMatchPos = -1;
 
       try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
 
@@ -612,5 +612,6 @@
 
 
 </html>
+
 
 
