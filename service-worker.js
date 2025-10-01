@@ -3,7 +3,7 @@
 // 1) 앱 전용 프리픽스
 const CACHE_PREFIX = "khymn-";
 // 배포 시 이 값만 올리세요
-const VERSION = "v2025-09-20-01";
+const VERSION = "v2025-10-01-01";
 const CACHE_NAME = `${CACHE_PREFIX}${VERSION}`;
 
 // 2) 이 앱에 필요한 파일만 절대경로로
