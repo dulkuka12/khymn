@@ -14,8 +14,8 @@ const ASSETS = [
   "/khymn/icon-512.png",
   "/khymn/manifest.json",
   "/khymn/hymnbook.pdf",
-  "/khymn/pdfjs/pdf.js",
-  "/khymn/pdfjs/pdf.worker.js",
+  "/khymn/pdf.js",
+  "/khymn/pdf.worker.js",
 ];
 
 // 3) 설치: 캐시 프리로드
