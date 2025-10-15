@@ -33,8 +33,9 @@
   {
     "number": 7,
     "title": "부활송가 (A)",
-    "page": 12
-  },
+    "page": 12,
+    "end": 13
+   },
   {
     "number": 8,
     "title": "부활송가 (B)",
