@@ -2,14 +2,12 @@
   {
     "number": 1,
     "title": "아침저녁기도 (A)",
-    "page": 1,
-    "end": 3
+    "page": 1
   },
   {
     "number": 2,
     "title": "저녁기도 (B)",
-    "page": 4,
-    "end": 8
+    "page": 4
   },
   {
     "number": 3,
@@ -37,7 +35,7 @@
     "title": "부활송가 (A)",
     "page": 12,
     "end": 13
-  },
+   },
   {
     "number": 8,
     "title": "부활송가 (B)",
@@ -46,8 +44,7 @@
   {
     "number": 9,
     "title": "즈가리야 송가 (A)",
-    "page": 15,
-    "end": 16
+    "page": 15
   },
   {
     "number": 10,
@@ -58,7 +55,6 @@
     "number": 11,
     "title": "이사야 첫째 송가 (A)",
     "page": 18
-    "end": 19
   },
   {
     "number": 12,
@@ -78,8 +74,7 @@
   {
     "number": 15,
     "title": "성모 마리아 송가 (A)",
-    "page": 23,
-    "end": 24
+    "page": 23
   },
   {
     "number": 16,
@@ -100,8 +95,7 @@
   {
     "number": 19,
     "title": "모세 송가 (A)",
-    "page": 28,
-    "end": 29
+    "page": 28
   },
   {
     "number": 20,
@@ -111,26 +105,22 @@
   {
     "number": 21,
     "title": "당신은 하느님 (A)",
-    "page": 31,
-    "end": 32
+    "page": 31
   },
   {
     "number": 22,
     "title": "당신은 하느님 (B)",
-    "page": 33,
-    "end": 34
+    "page": 33
   },
   {
     "number": 23,
     "title": "당신은 하느님 (C)",
-    "page": 35,
-    "end": 36
+    "page": 35
   },
   {
     "number": 24,
     "title": "창조송가 (A)",
-    "page": 37,
-    "end": 38
+    "page": 37
   },
   {
     "number": 25,
@@ -140,14 +130,12 @@
   {
     "number": 26,
     "title": "창조송가 (C)",
-    "page": 40,
-    "end": 41
+    "page": 40
   },
   {
     "number": 27,
     "title": "이사야 둘째 송가 (A)",
-    "page": 42,
-    "end": 43
+    "page": 42
   },
   {
     "number": 28,
@@ -157,8 +145,7 @@
   {
     "number": 29,
     "title": "이사야 셋째 송가 (A)",
-    "page": 45,
-    "end": 46
+    "page": 45
   },
   {
     "number": 30,
@@ -168,14 +155,12 @@
   {
     "number": 31,
     "title": "참회송가 (A)",
-    "page": 48,
-    "end": 49
+    "page": 48
   },
   {
     "number": 32,
     "title": "참회송가 (B)",
-    "page": 50,
-    "end": 51
+    "page": 50
   },
   {
     "number": 33,
@@ -251,8 +236,7 @@
   {
     "number": 47,
     "title": "시편곡조 (A)  8곡조",
-    "page": 62,
-    "end": 63
+    "page": 62
   },
   {
     "number": 48,
@@ -399,8 +383,7 @@
   {
     "number": 76,
     "title": "니케아신경 (B)",
-    "page": 83,
-    "end": 84
+    "page": 83
   },
   {
     "number": 77,
@@ -426,8 +409,7 @@
   {
     "number": 81,
     "title": "영광송 (C)",
-    "page": 88,
-    "end": 89
+    "page": 88
   },
   {
     "number": 82,
@@ -473,14 +455,12 @@
   {
     "number": 90,
     "title": "대연도",
-    "page": 98,
-    "end": 100
+    "page": 98
   },
   {
     "number": 91,
     "title": "책망가",
-    "page": 101,
-    "end": 102
+    "page": 101
   },
   {
     "number": 92,
@@ -1014,8 +994,7 @@
   {
     "number": 202,
     "title": "진실하다 저 십자가",
-    "page": 196,
-    "end": 197
+    "page": 196
   },
   {
     "number": 203,
@@ -1265,8 +1244,7 @@
   {
     "number": 252,
     "title": "어허라디야",
-    "page": 246,
-    "end": 247
+    "page": 246
   },
   {
     "number": 253,
@@ -1581,7 +1559,7 @@
   {
     "number": 315,
     "title": "저 높은 보좌에",
-    "page": 306
+    "page": 315
   },
   {
     "number": 316,
@@ -2902,7 +2880,7 @@
     "title": "저 장미꽃 위에 이슬",
     "page": 556,
     "end": 557
-  },
+   },
   {
     "number": 579,
     "title": "좋은 날 기쁜 날",
