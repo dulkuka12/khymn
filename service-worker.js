@@ -1,56 +1,81 @@
 // khymn/service-worker.js
 
-// 1) 앱 전용 프리픽스
+// 1️⃣ 기본 설정
 const CACHE_PREFIX = "khymn-";
-// 배포 시 이 값만 올리세요
-const VERSION = "v2025-10-01-01";
+const VERSION = "v2025-10-15-01";
 const CACHE_NAME = `${CACHE_PREFIX}${VERSION}`;
 
-// 2) 이 앱에 필요한 파일만 절대경로로
-const ASSETS = [
+// 2️⃣ 핵심 파일(업데이트 시마다 교체)
+const CORE_ASSETS = [
   "/khymn/index.html",
   "/khymn/hymn-index-final.json",
+  "/khymn/manifest.json",
   "/khymn/icon-192.png",
   "/khymn/icon-512.png",
-  "/khymn/manifest.json",
-  "/khymn/hymnbook.pdf",
-  "/khymn/pdf.js",
-  "/khymn/pdf.worker.js",
+  "/khymn/service-worker.js"
 ];
 
-// 3) 설치: 캐시 프리로드
+// 3️⃣ 대용량(한 번만 캐시)
+const LARGE_FILES = [
+  "/khymn/hymnbook.pdf",
+  "/khymn/pdf.js",
+  "/khymn/pdf.worker.js"
+];
+
+// 4️⃣ 설치 이벤트
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
-      .catch(err => console.error("[khymn][install] 실패:", err))
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+      await cache.addAll(CORE_ASSETS);
+      console.log("📦 CORE_ASSETS cached");
+      self.skipWaiting();
+    })()
   );
 });
 
-// 4) 활성화: khymn- 으로 시작하는 오래된 캐시만 삭제 (kbcp 것은 건드리지 않음)
+// 5️⃣ 활성화: 이전 캐시 정리
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(
         keys.map((key) => {
           if (key.startsWith(CACHE_PREFIX) && key !== CACHE_NAME) {
+            console.log("🗑 Deleting old cache:", key);
             return caches.delete(key);
           }
-          return null;
         })
-      )
-    ).then(() => self.clients.claim())
+      );
+      await caches.open(CACHE_NAME).then(cache => cache.addAll(LARGE_FILES));
+      await self.clients.claim();
+      console.log("✅ Service Worker activated");
+    })()
   );
 });
 
-// 5) 헬퍼: 이 SW가 처리할 요청만 필터링 (같은 오리진 + /khymn/ 경로)
-function handles(request) {
-  const url = new URL(request.url);
-  return url.origin === location.origin && url.pathname.startsWith("/khymn/");
-}
+// 6️⃣ 요청 처리
+self.addEventListener("fetch", (event) => {
+  const req = event.request;
+  const url = new URL(req.url);
 
-// 6) 전략: HTML은 Network First, 그 외는 Cache First
+  // khymn 경로만 처리
+  if (url.origin !== location.origin || !url.pathname.startsWith("/khymn/")) return;
+
+  if (req.method !== "GET") return;
+
+  // HTML은 네트워크 우선
+  const accepts = req.headers.get("accept") || "";
+  if (req.mode === "navigate" || accepts.includes("text/html")) {
+    event.respondWith(networkFirst(req));
+    return;
+  }
+
+  // 나머지: 캐시 우선
+  event.respondWith(cacheFirst(req));
+});
+
+// 7️⃣ 전략 정의
 async function networkFirst(req) {
   const cache = await caches.open(CACHE_NAME);
   try {
@@ -59,8 +84,7 @@ async function networkFirst(req) {
     return res;
   } catch {
     const cached = await cache.match(req);
-    if (cached) return cached;
-    return new Response("Offline", { status: 503, statusText: "Offline" });
+    return cached || new Response("Offline", { status: 503 });
   }
 }
 
@@ -73,31 +97,9 @@ async function cacheFirst(req) {
   return res;
 }
 
-// 7) fetch 핸들러: khymn 경로만 응답 (다른 앱은 건드리지 않음)
-self.addEventListener("fetch", (event) => {
-  const req = event.request;
-
-  // GET만 처리
-  if (req.method !== "GET") return;
-  // 이 앱이 담당하는 경로 아니면 무시
-  if (!handles(req)) return;
-
-  // HTML 탐색 요청은 최신 우선
-  const accepts = req.headers.get("accept") || "";
-  if (req.mode === "navigate" || accepts.includes("text/html")) {
-    event.respondWith(networkFirst(req));
-    return;
-  }
-
-  // 그 외 정적 자원은 캐시 우선
-  event.respondWith(cacheFirst(req));
-});
-
-// 8) 즉시 활성화 메시지 처리(선택)
+// 8️⃣ 즉시 활성화
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting();
 });
-
-
 
 
