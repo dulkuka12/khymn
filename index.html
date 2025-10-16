@@ -71,7 +71,9 @@
     .notice-title {
       font-weight: 700;
       margin-bottom: 6px;
+      text-align: center;
     }
+
 
     .notice-desc {
       line-height: 1.5;
@@ -185,12 +187,14 @@
   <!-- 초기 안내문 -->
   <div id="pdfViewer" style="padding:24px;">
     <div class="notice-box">
-      <div class="notice-title">🎵 성가 검색 안내</div>
+
+      <div class="notice-title">⭐️ 성가 검색 안내 ⭐️</div>
+
       <div class="notice-desc">
-        성가번호나 제목을 입력하고 <b>Enter</b> 키를 누르세요.<br>
-        성가번호로 검색 후에는 좌우 화살표 버튼으로 <b>이전/다음 성가</b>로 이동할 수 있습니다.<br>
-        제목의 일부 단어로 검색 후에는 좌우 화살표 버튼으로 같은 단어를 가진 <b>이전/다음 제목 성가</b>로 이동할 수 있습니다.<br>
-        전례성가(1-93번)는 곡제목이, 일반성가(101-661번)는 첫줄 가사가 제목이 됩니다.
+        ● 성가번호나 제목을 입력하고 <b>Enter</b> 키를 누르세요.<br>
+        ● 성가번호로 검색 후에는 좌우 화살표 버튼으로 <b>이전/다음 성가</b>로 이동할 수 있습니다.<br>
+        ● 제목의 일부 단어로 검색 후에는 좌우 화살표 버튼으로 같은 단어를 가진 <b>이전/다음 제목 성가</b>로 이동할 수 있습니다.<br>
+        ● <b>전례성가</b>(1-95번)는 곡제목이, <b>일반성가</b>(101-662번)는 첫줄 가사가 통상 제목이 됩니다.
       </div>
     </div>
   </div>
@@ -428,6 +432,15 @@
     async function stepHymn(delta) {
       try { await initOnce(); } catch { alert('데이터 초기화 중입니다. 잠시 후 다시 시도하세요.'); return; }
 
+      const inputEl = document.getElementById("searchInput");
+      const raw = (inputEl.value || "").trim();
+
+      // ✅ 입력란이 비어 있으면 안내 후 종료
+      if (raw === "") {
+        alert("먼저 성가 번호나 제목을 입력하고 검색하세요.");
+        return;
+      }
+
       if (!lastQueryIsNumeric) {
         // 제목 검색 모드: 일치 목록 내에서 이동
         if (!Array.isArray(lastTitleMatchIndices) || lastTitleMatchIndices.length === 0) {
@@ -442,18 +455,15 @@
         lastTitleMatchPos = nextPos;
         const idx = lastTitleMatchIndices[lastTitleMatchPos];
         // 입력창은 단어 그대로 유지
-        // document.getElementById("searchInput").value = lastQueryText;
         navigateToIndex(idx);
         return;
       }
 
       // 숫자 검색 모드: 기존 로직(번호 ±1)
-      const inputEl = document.getElementById("searchInput");
-      const raw = (inputEl.value || "").trim();
       let base = Number(raw);
       if (!Number.isFinite(base)) {
         if (lastShownNumber != null) base = Number(lastShownNumber);
-        else { alert("먼저 성가 번호를 입력 검색해 주세요."); return; }
+        else { alert("먼저 성가 번호나 제목을 입력하고 검색하세요."); return; }
       }
 
       const next = base + (delta > 0 ? 1 : -1);
