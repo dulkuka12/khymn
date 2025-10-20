@@ -13,7 +13,8 @@
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      background-color: #e0e0e0; /* 🔹 searchhymn보다 살짝 어두움 */
+      background-color: #e0e0e0;
+      /* 🔹 searchhymn보다 살짝 어두움 */
       margin: 0;
       padding: 12px;
     }
@@ -111,11 +112,23 @@
       color: #fff;
       padding: 6px 14px;
       border-radius: 20px;
-      font-size: 0.9px;
+      font-size: 0.9em;
       z-index: 9999;
       opacity: 0;
       transition: opacity 0.3s;
       pointer-events: none;
+      /* ✅ 한 줄로만 표시되도록 추가 */
+      white-space: nowrap;
+      /* 줄바꿈 금지 */
+      overflow: hidden;
+      /* 넘치는 내용 숨김 */
+      text-overflow: ellipsis;
+      /* 넘칠 때 '…' 표시 */
+      max-width: 90vw;
+      /* 너무 길어질 경우 화면 폭의 90%로 제한 */
+      text-align: center;
+      /* 가운데 정렬 (선택 사항) */
+
     }
 
     html,
@@ -173,7 +186,7 @@
           else location.href = "about:blank";
         }, 800);
       } else {
-        showToast("한 번 더 누르면 종료됩니다.");
+        showToast("한 번 더 누르면 종료합니다.");
         lastBackPress = now;
       }
     }
