@@ -161,7 +161,28 @@
         min-width: 60px;
       }
     }
-  </style>
+
+
+  /* 📱 하단 토스트 메시지 스타일 */
+  #exitToast {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 9999;
+  }
+
+
+
+
+</style>
 </head>
 
 <body>
@@ -200,11 +221,14 @@
         ● 성가번호나 제목을 입력하고 <b>Enter</b> 키를 누르세요.<br>
         ● 좌우 화살표 버튼으로 <b>이전/다음 성가</b>를 이동할 수 있습니다.<br>
         ● 제목의 일부 단어로 검색 후에는 <b>이전/다음 제목 성가</b>로 이동할 수 있습니다.<br>
-        ● <b>전례성가</b>(1–95)는 제목이, <b>일반성가</b>(101–662)는 보통 첫줄 가사가 제목이지만 일부는 제목이 따로 있기도 합니다.<br>
-        ● 앱 아이콘을 설치하는 방법은 기도서 앱 <b>설치안내</b>를 참조하세요.
+        ● <b>전례성가</b>(1–95)는 제목이, <b>일반성가</b>(101–662)는 첫줄 가사가 제목이지만 제목이 따로 있는 성가도 있습니다.
       </div>
     </div>
   </div>
+
+<div id="exitToast">한번 더 누르면 종료됩니다.</div>
+
+
 
   <!-- PDF.js -->
   <script src="/khymn/pdf.js"></script>
@@ -383,6 +407,41 @@
     window.addEventListener("load", () => setTimeout(hideAppLoading, 1200));
     if ("serviceWorker" in navigator)
       navigator.serviceWorker.ready.then(() => hideAppLoading());
+
+
+
+
+
+
+
+// 뒤로가기 두 번 시 종료 메시지
+  let backPressedOnce = false;
+
+  function showExitToast() {
+    const toast = document.getElementById('exitToast');
+    toast.style.opacity = '1';
+    setTimeout(() => (toast.style.opacity = '0'), 1500); // 1.5초 후 사라짐
+  }
+
+  window.addEventListener('load', () => {
+    // PWA 모드일 때만 활성화
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+      history.pushState(null, '', location.href); // 초기 히스토리 추가
+
+      window.addEventListener('popstate', () => {
+        if (backPressedOnce) {
+          window.close(); // 대부분의 PWA에서 홈 화면으로 나감
+        } else {
+          backPressedOnce = true;
+          showExitToast();
+          setTimeout(() => (backPressedOnce = false), 2000); // 2초 내 재누르면 종료
+          history.pushState(null, '', location.href); // 뒤로가기 방지
+        }
+      });
+    }
+  });
+
+
   </script>
 </body>
 
