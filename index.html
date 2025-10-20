@@ -164,7 +164,7 @@
 
 
 
-  /* 📱 하단 토스트 메시지 스타일 -------------------------------*/
+  /* 📱 하단 토스트 메시지 스타일 -------------------------------
   #exitToast {
     position: fixed;
     bottom: 60px;
@@ -178,7 +178,7 @@
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 9999;
-  }
+  } */
 
 
 
@@ -227,7 +227,7 @@
     </div>
   </div>
 
-<div id="exitToast">한번 더 누르면 종료됩니다.</div>
+<!-- <div id="exitToast">한번 더 누르면 종료됩니다.</div> -->
 
 
 
@@ -236,38 +236,35 @@
 
   <script>
 
-
+/* 종료 메시지를 사용하려면 첫 화면에서 두번째 화면으로 넘어가는 과정이 있어야 함 
+// 뒤로가기 두 번 시 종료 메시지
   let backPressedOnce = false;
 
   function showExitToast() {
     const toast = document.getElementById('exitToast');
     toast.style.opacity = '1';
-    setTimeout(() => (toast.style.opacity = '0'), 1500);
+    setTimeout(() => (toast.style.opacity = '0'), 1500); // 1.5초 후 사라짐
   }
 
-  // 앱 실행 시 가짜 히스토리 항목 2개 추가 → 뒤로가기 방지용
   window.addEventListener('load', () => {
+    // PWA 모드일 때만 활성화
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-      history.pushState({ page: 1 }, '', location.href);
-      history.pushState({ page: 2 }, '', location.href);
+      history.pushState(null, '', location.href); // 초기 히스토리 추가
 
-      window.addEventListener('popstate', (event) => {
-//        if (backPressedOnce) {
-//          window.close(); // 대부분의 브라우저에서는 홈으로 복귀
-//        } else {
+      window.addEventListener('popstate', () => {
+        if (backPressedOnce) {
+          window.close(); // 대부분의 PWA에서 홈 화면으로 나감
+        } else {
           backPressedOnce = true;
           showExitToast();
-          setTimeout(() => (backPressedOnce = false), 2000);
-
-          // 다시 앞으로 한 단계 이동시켜 앱이 안 나가게 함
-          history.pushState({ page: 2 }, '', location.href);
+          setTimeout(() => (backPressedOnce = false), 2000); // 2초 내 재누르면 종료
+          history.pushState(null, '', location.href); // 뒤로가기 방지
         }
-      );
+      });
     }
   });
-
-
-
+  
+*/
 
 /**** 1) Service Worker 등록 ****/
     if ("serviceWorker" in navigator) {
