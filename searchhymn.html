@@ -147,11 +147,31 @@
     }
 
     html, body { overscroll-behavior: contain; }
+
+#toastMessage {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+
   </style>
 </head>
 
 <body>
 
+  <div id="toastMessage"></div>
+  
   <!-- 상단 툴바 -->
   <div class="toolbar">
     <button aria-label="이전 성가" onclick="stepHymn(-1)">◀</button>
@@ -322,6 +342,42 @@
     bookmarks = JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || "[]");
     while (bookmarks.length < 5) bookmarks.push("");
   }
+
+
+  /**** 종료 메시지 제어 ****/
+let lastBackPress = 0;
+let toastTimer = null;
+
+window.addEventListener("popstate", (event) => {
+  handleBackPress();
+  history.pushState(null, null, location.href);
+});
+
+function handleBackPress() {
+  const now = Date.now();
+  if (now - lastBackPress < 2000) {
+    showToast("👋 앱을 종료합니다.");
+    setTimeout(() => {
+      if (window.history.length > 1) history.back();
+      else location.href = "about:blank";
+    }, 800);
+  } else {
+    showToast("한 번 더 누르면 종료됩니다.");
+    lastBackPress = now;
+  }
+}
+
+function showToast(message) {
+  const toast = document.getElementById("toastMessage");
+  toast.textContent = message;
+  toast.style.opacity = "1";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => (toast.style.opacity = "0"), 1500);
+}
+
+// popstate 감지 초기화
+history.pushState(null, null, location.href);
+
   </script>
 </body>
 </html>

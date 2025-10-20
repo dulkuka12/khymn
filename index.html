@@ -23,15 +23,21 @@
       gap: 8px;
       flex-wrap: nowrap;
       overflow: hidden;
-      opacity: 0.3;        /* 비활성 표시 */
-      pointer-events: none; /* 버튼 클릭 불가 */
+      opacity: 0.4; /* 비활성화 표시만 유지 */
     }
 
     .toolbar button,
     #searchInput {
-      padding: 8px;
+      padding: 8px 10px;
       border: 1px solid #ccc;
       background-color: #eee;
+      line-height: 1.2;
+      font-size: 1em;
+      height: 36px;
+    }
+
+    #searchInput {
+      flex: 1;
     }
 
     #pdfViewer {
@@ -95,8 +101,7 @@
 
     html, body { overscroll-behavior: contain; }
 
-
-/* 토스트 메시지 */
+    /* 토스트 메시지 */
     #toastMessage {
       position: fixed;
       bottom: 60px;
@@ -112,9 +117,7 @@
       transition: opacity 0.3s;
       pointer-events: none;
     }
-
-
-</style>
+  </style>
 </head>
 
 <body>
@@ -125,7 +128,7 @@
     <div style="font-size: 0.9em; color: #777;">네트워크 연결 또는 캐시 데이터를 확인 중입니다.</div>
   </div>
 
-  <!-- 상단 비활성 툴바 (형태만 유지) -->
+  <!-- 상단 비활성 툴바 -->
   <div class="toolbar">
     <button disabled>◀</button>
     <input id="searchInput" type="text" placeholder="번호나 제목 입력" disabled>
@@ -142,7 +145,7 @@
         ● 좌우 화살표 버튼으로 <b>이전/다음 성가</b>를 이동할 수 있습니다.<br>
         ● 제목의 일부 단어로 검색 후에는 <b>이전/다음 제목 성가</b>로 이동할 수 있습니다.<br>
         ● <b>전례성가</b>(1–95)는 제목이, <b>일반성가</b>(101–662)는 첫줄 가사가 제목이지만 제목이 따로 있는 성가도 있습니다.<br>
-        ● 이 앱은 오프라인에서도 성가를 검색하고 볼 수 있습니다.<br>
+        ● 이 앱의 설치는 기도서 <b>앱설치 안내</b>를 참조하세요.<br>
         ● 아래 <b>“검색 시작”</b> 버튼을 눌러 검색 화면으로 이동하세요.
       </div>
     </div>
@@ -150,9 +153,8 @@
     <button class="start-btn" onclick="location.href='searchhymn.html'">🔍 검색 시작</button>
   </div>
 
-
-
-
+  <!-- 종료 안내용 토스트 -->
+  <div id="toastMessage"></div>
 
   <script>
     /**** 1) Service Worker 등록 및 업데이트 안내 ****/
@@ -189,8 +191,7 @@
       if (loader) loader.style.display = "none";
     });
 
-
-/**** 종료 메시지 제어 ****/
+    /**** 2) 종료 메시지 제어 ****/
     let lastBackPress = 0;
     let toastTimer = null;
 
@@ -203,7 +204,11 @@
       const now = Date.now();
       if (now - lastBackPress < 2000) {
         showToast("👋 앱을 종료합니다.");
-        setTimeout(() => window.close(), 800);
+        // 모바일 브라우저에서는 window.close() 차단됨 → 홈으로 이동
+        setTimeout(() => {
+          if (window.history.length > 1) history.back();
+          else location.href = "about:blank";
+        }, 800);
       } else {
         showToast("한 번 더 누르면 종료됩니다.");
         lastBackPress = now;
@@ -215,13 +220,11 @@
       toast.textContent = message;
       toast.style.opacity = "1";
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.style.opacity = "0", 1500);
+      toastTimer = setTimeout(() => (toast.style.opacity = "0"), 1500);
     }
 
-    // popstate 감지 초기화용
+    // popstate 감지 초기화
     history.pushState(null, null, location.href);
-
   </script>
 </body>
-
 </html>
