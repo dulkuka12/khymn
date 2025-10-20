@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>성가 2015 - 검색</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#4b0082" />
+  <link rel="icon" href="icon-192.png" />
+
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 12px;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: nowrap;
+      overflow: hidden;
+    }
+
+    .toolbar button {
+      padding: 6px 8px;
+      margin: 0;
+      flex: 0 0 auto;
+      min-width: 36px;
+    }
+
+    .toolbar button:last-child {
+      margin-left: 14px;
+    }
+
+    #searchInput {
+      padding: 8px 8px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      flex: 1 1 0;
+      min-width: 80px;
+    }
+
+    #pdfViewer {
+      margin-top: 16px;
+      background: white;
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .notice-box {
+      display: inline-block;
+      text-align: left;
+      border: 1px dashed #bbb;
+      background: #fafafa;
+      padding: 18px 20px;
+      border-radius: 10px;
+      font-size: 1.05em;
+      color: #555;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .notice-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .notice-desc {
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    canvas {
+      display: inline-block;
+      max-width: 100%;
+      height: auto;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    }
+
+    #bookmarkPopup {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: 1px solid #888;
+      padding: 20px 30px 20px 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      z-index: 999;
+      min-width: 250px;
+    }
+
+    #bookmarkPopup .closeBtn {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .bookmark-entry {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .bookmark-entry input {
+      margin-left: 6px;
+      width: 90px;
+      padding: 6px;
+      font-size: 1em;
+      text-align: center;
+      border: 1px solid #ccc;
+    }
+
+    .bookmark-entry button {
+      padding: 6px 10px;
+      font-size: 0.9em;
+      white-space: nowrap;
+      min-width: 55px;
+    }
+
+    .bookmark-entry button.save-btn {
+      margin-left: 6px;
+      background-color: #d0e0ff;
+      border: 1px solid #a0c0ff;
+    }
+
+    .bookmark-entry button.delete-btn {
+      background-color: #f0d0d0;
+      border: 1px solid #e0a0a0;
+    }
+
+    .bookmark-entry button.search-btn {
+      margin-left: 16px;
+      background-color: #aaccee;
+      border: 1px solid #6699cc;
+      font-weight: bold;
+    }
+
+    html, body { overscroll-behavior: contain; }
+  </style>
+</head>
+
+<body>
+
+  <!-- 상단 툴바 -->
+  <div class="toolbar">
+    <button aria-label="이전 성가" onclick="stepHymn(-1)">◀</button>
+    <input id="searchInput" type="text" placeholder="번호나 제목 입력" 
+           onkeydown="if (event.key === 'Enter') searchHymn()">
+    <button aria-label="다음 성가" onclick="stepHymn(1)">▶</button>
+    <button onclick="openBookmarkPopup()">📌 책갈피</button>
+  </div>
+
+  <!-- 책갈피 팝업 -->
+  <div id="bookmarkPopup">
+    <button class="closeBtn" onclick="closeBookmarkPopup()">✖</button>
+    <h3 style="margin-top: 0;">📌 오늘의 성가</h3>
+    <div id="bookmarkList"></div>
+  </div>
+
+  <!-- 안내문 -->
+  <div id="pdfViewer" style="padding:24px;">
+    <div class="notice-box">
+      <div class="notice-title">⭐️ 성가 검색 ⭐️</div>
+      <div class="notice-desc">검색할 성가번호나 제목을 입력하세요.</div>
+    </div>
+  </div>
+
+  <script src="/khymn/pdf.js"></script>
+  <script src="/khymn/pdf.worker.js"></script>
+
+  <script>
+  const PDF_URL = '/khymn/hymnbook.pdf';
+  const INDEX_URL = '/khymn/hymn-index-final.json';
+  const BOOKMARKS_KEY = 'khymn-bookmarks';
+
+  if (window.pdfjsLib)
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/khymn/pdf.worker.js';
+
+  let pdfDoc = null, hymnIndex = [], bookmarks = [];
+  let indexLoaded = false, lastShownNumber = null;
+  let lastTitleMatchIndices = [], lastTitleMatchPos = -1;
+
+  async function initOnce() {
+    if (!pdfDoc) pdfDoc = await pdfjsLib.getDocument(PDF_URL).promise;
+    if (!indexLoaded) {
+      const res = await fetch(INDEX_URL, { cache: 'no-store' });
+      hymnIndex = await res.json();
+      indexLoaded = true;
+    }
+  }
+
+  async function searchHymn() {
+    await initOnce();
+    const inputElem = document.getElementById("searchInput");
+    const input = inputElem.value.trim();
+    if (!input) {
+      if (lastTitleMatchIndices.length > 0) {
+        navigateToIndex(lastTitleMatchIndices[lastTitleMatchPos]);
+        return;
+      }
+      return;
+    }
+
+    const isNum = /^\d+$/.test(input);
+    if (isNum) {
+      const idx = hymnIndex.findIndex(it => String(it.number) === input);
+      if (idx < 0) return alert("❌ 해당 성가 번호 없음");
+      navigateToIndex(idx);
+      inputElem.value = input;
+    } else {
+      const q = input.replace(/\s+/g, "").toLowerCase();
+      lastTitleMatchIndices = hymnIndex
+        .map((it, i) => ({ i, t: it.title.replace(/\s+/g, "").toLowerCase() }))
+        .filter(o => o.t.includes(q))
+        .map(o => o.i);
+      if (!lastTitleMatchIndices.length) return alert("❌ 제목에 해당 단어 없음");
+      lastTitleMatchPos = 0;
+      navigateToIndex(lastTitleMatchIndices[0]);
+    }
+  }
+
+  async function stepHymn(delta) {
+    await initOnce();
+    if (lastTitleMatchIndices.length > 0 && lastTitleMatchPos >= 0) {
+      let newPos = lastTitleMatchPos + (delta > 0 ? 1 : -1);
+      if (newPos < 0 || newPos >= lastTitleMatchIndices.length)
+        return alert(delta > 0 ? "마지막입니다." : "처음입니다.");
+      lastTitleMatchPos = newPos;
+      navigateToIndex(lastTitleMatchIndices[newPos]);
+      return;
+    }
+
+    const input = document.getElementById("searchInput");
+    const val = input.value.trim();
+    if (!val) return alert("먼저 성가를 검색하세요.");
+    if (/^\d+$/.test(val)) {
+      let num = Number(val) + delta;
+      const idx = hymnIndex.findIndex(it => Number(it.number) === num);
+      if (idx < 0) return alert("❌ 해당 성가가 없습니다.");
+      input.value = num;
+      navigateToIndex(idx);
+    }
+  }
+
+  async function navigateToIndex(idx) {
+    const item = hymnIndex[idx];
+    const page = Number(item.page);
+    const end = item.end ? Number(item.end) : page;
+    renderPages(page, end);
+    lastShownNumber = item.number;
+  }
+
+  async function renderPages(start, end) {
+    const viewer = document.getElementById("pdfViewer");
+    viewer.innerHTML = "";
+    for (let p = start; p <= end; p++) {
+      const page = await pdfDoc.getPage(p);
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const vp = page.getViewport({ scale: 1.6 });
+      canvas.width = vp.width;
+      canvas.height = vp.height;
+      await page.render({ canvasContext: ctx, viewport: vp }).promise;
+      viewer.appendChild(canvas);
+    }
+    window.scrollTo({ top: 0 });
+  }
+
+  function openBookmarkPopup() {
+    loadBookmarks();
+    updateBookmarkList();
+    document.getElementById("bookmarkPopup").style.display = "block";
+  }
+  function closeBookmarkPopup() {
+    document.getElementById("bookmarkPopup").style.display = "none";
+  }
+
+  function updateBookmarkList() {
+    const box = document.getElementById("bookmarkList");
+    while (bookmarks.length < 5) bookmarks.push("");
+    box.innerHTML = "";
+    bookmarks.forEach((v, i) => {
+      box.innerHTML += `<div class="bookmark-entry">
+        <button onclick="deleteBookmark(${i})" class="delete-btn">삭제</button>
+        <input id="bmInput${i}" type="text" inputmode="numeric" maxlength="3" value="${v}">
+        <button onclick="saveBookmark(${i})" class="save-btn">저장</button>
+        <button onclick="searchFromBookmark(${i})" class="search-btn">검색</button>
+      </div>`;
+    });
+  }
+
+  function saveBookmark(i) {
+    const val = document.getElementById(`bmInput${i}`).value.trim();
+    if (/^\d{1,3}$/.test(val)) {
+      bookmarks[i] = val;
+      saveBookmarks();
+      updateBookmarkList();
+    } else alert("숫자 1~3자리만 저장 가능");
+  }
+
+  function deleteBookmark(i) { bookmarks[i] = ""; saveBookmarks(); updateBookmarkList(); }
+  function searchFromBookmark(i) {
+    const val = bookmarks[i];
+    if (!val) return alert("빈 칸입니다.");
+    document.getElementById("searchInput").value = val;
+    searchHymn();
+    closeBookmarkPopup();
+  }
+  function saveBookmarks() { localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks)); }
+  function loadBookmarks() {
+    bookmarks = JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || "[]");
+    while (bookmarks.length < 5) bookmarks.push("");
+  }
+  </script>
+</body>
+</html>
