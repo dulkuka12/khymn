@@ -252,9 +252,9 @@
       history.pushState({ page: 2 }, '', location.href);
 
       window.addEventListener('popstate', (event) => {
-        if (backPressedOnce) {
-          window.close(); // 대부분의 브라우저에서는 홈으로 복귀
-        } else {
+//        if (backPressedOnce) {
+//          window.close(); // 대부분의 브라우저에서는 홈으로 복귀
+//        } else {
           backPressedOnce = true;
           showExitToast();
           setTimeout(() => (backPressedOnce = false), 2000);
@@ -262,7 +262,7 @@
           // 다시 앞으로 한 단계 이동시켜 앱이 안 나가게 함
           history.pushState({ page: 2 }, '', location.href);
         }
-      });
+      );
     }
   });
 
