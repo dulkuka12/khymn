@@ -2,231 +2,117 @@
 <html lang="ko">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>성가 2015</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#4CAF50">
 
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#4b0082" />
-  <link rel="icon" href="icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <title>성공회 사목예식서</title>
+  <link rel="manifest" href="manifest.json">
 
   <style>
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background-color: #b2a9a9;
-      /* 🔹 searchhymn보다 살짝 어두움 */
-      margin: 0;
-      padding: 12px;
-    }
-
-    .toolbar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: nowrap;
-      overflow: hidden;
-    }
-
-    .toolbar button {
-      padding: 6px 8px;
-      margin: 0;
-      flex: 0 0 auto;
-      min-width: 36px;
-    }
-
-    .toolbar button:last-child {
-      margin-left: 14px;
-    }
-
-    #searchInput {
-      padding: 8px 8px;
-      font-size: 1em;
-      border: 1px solid #ccc;
-      flex: 1 1 0;
-      min-width: 80px;
-    }
-
-    /* 비활성 표시 (약간 투명도 적용) */
-    .toolbar {
-      opacity: 10;
-      pointer-events: none;
-    }
-
-    #pdfViewer {
-      margin-top: 16px;
-      background: white;
-      padding: 24px;
-      border: 1px solid #ccc;
-      text-align: center;
-      border-radius: 8px;
-    }
-
-    .notice-box {
-      display: inline-block;
-      text-align: left;
-      border: 1px dashed #bbb;
-      background: #fafafa;
-      padding: 20px 24px;
-      border-radius: 10px;
-      font-size: 1.05em;
-      color: #555;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-      max-width: 540px;
-    }
-
-    .notice-title {
-      font-weight: 700;
-      margin-bottom: 8px;
-      text-align: center;
-      color: #4b0082;
-    }
-
-    .notice-desc {
-      line-height: 1.6;
-    }
-
-    .start-btn {
-      display: block;
-      margin: 32px auto 0;
-      background-color: #4b0082;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 14px 28px;
-      font-size: 1.05em;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .start-btn:hover {
-      background-color: #5e0ba0;
-    }
-
-    /* 토스트 메시지 */
-    #toastMessage {
-      position: fixed;
-      bottom: 60px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.75);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 24px;
-      font-size: 16px;
-      z-index: 9999;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 90vw;
-      text-align: center;
-      /* 독립 레이어화: opacity나 transform 영향 안받게 함 */
-      will-change: transform, opacity;
-      transform: translateX(-50%) translateZ(0);
-    }
-
-    html,
-    body {
-      overscroll-behavior: contain;
-    }
   </style>
 </head>
 
 <body>
 
-  <div id="toastMessage"></div>
-
-  <!-- 🔸 searchhymn과 동일 구조의 툴바 (비활성 상태) -->
-  <div class="toolbar">
-    <button disabled>◀</button>
-    <input id="searchInput" type="text" placeholder="번호나 제목 입력" disabled>
-    <button disabled>▶</button>
-    <button disabled>📌 책갈피</button>
+  <div class="menu-container">
+    <a href="daily-office-select.html" class="menu-button">1. 성무일과</a>
+    <a href="ucharist-select.html" class="menu-button">2. 감사성찬례</a>
+    <a href="sacrament-select.html" class="menu-button">3. 성사예식</a>
+    <a href="pastoral-select.html" class="menu-button">4. 사목예식</a>
+    <a href="holyday-select.html" class="menu-button">5. 월별축일표</a>
+    <a href="all-proper-select.html" class="menu-button">6. 특정문 바로보기</a>
+    <a href="main-prayer-select.html" class="menu-button">8. 주요기도문</a>
+    <a href="outline-list.html" class="menu-button">9. 신앙의 개요</a>
   </div>
-
-  <!-- 안내문 -->
-  <div id="pdfViewer">
-    <div class="notice-box">
-      <div class="notice-title">⭐️ 성가 검색 안내 ⭐️</div>
-      <div class="notice-desc">
-        ● 성가번호나 제목을 입력하고 <b>Enter</b> 키를 누르세요.<br>
-        ● 번호 입력 후 좌우 화살표 버튼으로 <b>이전/다음 번호 성가</b>로 이동할 수 있습니다.<br>
-        ● 제목의 단어 입력 후에는 <b>이전/다음 동일 단어 성가 </b>로 이동할 수 있습니다.<br>
-        ● 이 앱의 설치는 기도서 <b>앱설치 안내</b>를 참조하세요.<br>
-        ● 아래 <b>“검색 시작”</b> 버튼을 눌러 검색 화면으로 이동하세요.
-      </div>
-    </div>
-
-    <button class="start-btn" onclick="location.href='searchhymn.html'">🔍 검색 시작</button>
-  </div>
+  </br>
+  </br>
+  </br>
+  <script src="main.js" defer></script>
 
   <script>
-    /**** 1) Service Worker 등록 ****/
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("/khymn/service-worker.js", { scope: "/khymn/" })
-          .then((reg) => {
-            if (reg.waiting) promptUpdate(reg);
-            reg.addEventListener("updatefound", () => {
-              const newSW = reg.installing;
-              if (!newSW) return;
-              newSW.addEventListener("statechange", () => {
-                if (newSW.state === "installed" && navigator.serviceWorker.controller) {
-                  promptUpdate(reg);
-                }
-              });
-            });
-            navigator.serviceWorker.addEventListener("controllerchange", () => window.location.reload());
-          })
-          .catch((err) => console.error("SW 등록 실패:", err));
-      });
+let backPressedOnce = false;
 
-      function promptUpdate(reg) {
-        if (confirm("📢 새 버전이 있습니다. 지금 업데이트할까요?")) {
-          reg.waiting && reg.waiting.postMessage({ type: "SKIP_WAITING" });
-        }
-      }
+function isHomePage() {
+  const path = location.pathname;
+  return path.endsWith('index.html') || path === '/' || path === '/kbcp/';
+}
+
+
+
+function showToast(message) {
+  let toast = document.getElementById('back-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'back-toast';
+    toast.style.position = 'fixed';
+    toast.style.bottom = '60px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.background = 'rgba(0, 0, 0, 0.8)';
+    toast.style.color = 'white';
+    toast.style.padding = '10px 20px'; // 높이 낮춤
+    toast.style.borderRadius = '20px';
+    toast.style.fontSize = '1.2em';
+    toast.style.lineHeight = '1.5em'; // 줄 간격 조절
+    toast.style.maxWidth = '80%'; // 화면 기준 최대폭
+    toast.style.whiteSpace = 'nowrap'; // 한 줄 고정
+    toast.style.overflow = 'hidden';
+    toast.style.textOverflow = 'ellipsis'; // 넘치면 ... 처리
+    toast.style.zIndex = '9999';
+    toast.style.transition = 'opacity 0.3s';
+    toast.style.opacity = '0';
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.style.opacity = '1';
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+  }, 1500);
+}
+
+
+function setupSilentExit() {
+  if (!isHomePage()) return;
+  if (window.__silentExitSet) return;
+  window.__silentExitSet = true;
+
+  history.pushState(null, null, location.href);
+
+  window.addEventListener('popstate', function () {
+    if (!isHomePage()) return;
+
+    if (backPressedOnce) {
+      // 두 번째 뒤로가기 → 종료 허용
+      return;
     }
 
-    /**** 종료 메시지 제어 ****/
-    let lastBackPress = 0;
-    let toastTimer = null;
-
-    window.addEventListener("popstate", (event) => {
-      handleBackPress();
-      history.pushState(null, null, location.href);
-    });
-
-    function handleBackPress() {
-      const now = Date.now();
-      if (now - lastBackPress < 2000) {
-        showToast("👋 앱을 종료합니다.");
-        setTimeout(() => {
-          if (window.history.length > 1) history.back();
-          else location.href = "about:blank";
-        }, 800);
-      } else {
-        showToast("한 번 더 누르면 종료합니다.");
-        lastBackPress = now;
-      }
-    }
-
-    function showToast(message) {
-      const toast = document.getElementById("toastMessage");
-      toast.textContent = message;
-      toast.style.opacity = "1";
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => (toast.style.opacity = "0"), 1500);
-    }
-
-    // popstate 감지 초기화
+    // 첫 번째 뒤로가기 → 막고 토스트 메시지 표시
+    backPressedOnce = true;
+    showToast("한 번 더 누르면 종료합니다.");
     history.pushState(null, null, location.href);
 
+    setTimeout(() => {
+      backPressedOnce = false;
+    }, 2000);
+  });
+}
 
-  </script>
+window.addEventListener('load', setupSilentExit);
+window.addEventListener('pageshow', setupSilentExit);
+window.addEventListener('DOMContentLoaded', setupSilentExit);
+</script>
+
 </body>
 
 </html>
