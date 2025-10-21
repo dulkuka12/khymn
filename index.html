@@ -103,6 +103,33 @@
     }
 
     /* 토스트 메시지 */
+
+#toastMessage {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 24px;
+  font-size: 16px;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90vw;
+  text-align: center;
+
+  /* ✅ 독립 레이어화: opacity나 transform 영향 안받게 함 */
+  will-change: transform, opacity;
+  transform: translateX(-50%) translateZ(0);
+}
+
+/*
     #toastMessage {
     position: fixed; 
     bottom: 60px; 
@@ -117,13 +144,14 @@
     opacity: 0; 
     transition: opacity 0.3s; 
     pointer-events: none;
-    white-space: nowrap; /*줄바꿈 금지*/
-    overflow: hidden; /*넘치는 내용 숨김*/
-    text-overflow: ellipsis; /*넘칠 때 '…' 표시*/
-    max-width: 90vw; /*너무 길어질 경우 화면 폭의 90%로 제한*/
-    text-align: center; /*가운데 정렬 (선택 사항) */
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: 
+    ellipsis; 
+    max-width: 90vw; 
+    text-align: center; 
     }
-
+*/
     html,
     body {
       overscroll-behavior: contain;
@@ -134,18 +162,6 @@
 <body>
 
   <div id="toastMessage"></div>
-<!-- ✅ 로딩 안내 레이어 -->
-  
-  <div id="appLoading" style="
-    position: fixed; inset: 0;
-    background: rgba(255, 255, 255, 0.95);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    font-family: 'Noto Sans KR', sans-serif;
-    z-index: 9999; text-align: center; color: #333;">
-    <div style="font-size: 1.1em; margin-bottom: 10px;">📦 앱이 준비되는 중입니다...</div>
-    <div style="font-size: 0.9em; color: #777;">네트워크 연결 또는 캐시 데이터를 확인 중입니다.</div>
-  </div>
 
   <!-- 🔸 searchhymn과 동일 구조의 툴바 (비활성 상태) -->
   <div class="toolbar">
@@ -233,19 +249,6 @@
 
     // popstate 감지 초기화
     history.pushState(null, null, location.href);
-
-
-
-  /**** 8) 로딩 안내 제어 ****/
-    function hideAppLoading() {
-      const loader = document.getElementById("appLoading");
-      if (loader) loader.style.display = "none";
-    }
-    window.addEventListener("load", () => setTimeout(hideAppLoading, 1200));
-    if ("serviceWorker" in navigator)
-      navigator.serviceWorker.ready.then(() => hideAppLoading());
- 
-
 
 
   </script>
