@@ -2,7 +2,7 @@
 
 // 1️⃣ 기본 설정
 const CACHE_PREFIX = "khymn-";
-const VERSION = "v2025-10-21-01";
+const VERSION = "v2025-10-21-02";
 const CACHE_NAME = `${CACHE_PREFIX}${VERSION}`;
 
 // 2️⃣ 핵심 파일(업데이트 시마다 교체)
