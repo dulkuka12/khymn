@@ -134,6 +134,18 @@
 <body>
 
   <div id="toastMessage"></div>
+<!-- ✅ 로딩 안내 레이어 -->
+  
+  <div id="appLoading" style="
+    position: fixed; inset: 0;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-family: 'Noto Sans KR', sans-serif;
+    z-index: 9999; text-align: center; color: #333;">
+    <div style="font-size: 1.1em; margin-bottom: 10px;">📦 앱이 준비되는 중입니다...</div>
+    <div style="font-size: 0.9em; color: #777;">네트워크 연결 또는 캐시 데이터를 확인 중입니다.</div>
+  </div>
 
   <!-- 🔸 searchhymn과 동일 구조의 툴바 (비활성 상태) -->
   <div class="toolbar">
@@ -151,7 +163,6 @@
         ● 성가번호나 제목을 입력하고 <b>Enter</b> 키를 누르세요.<br>
         ● 좌우 화살표 버튼으로 <b>이전/다음 성가</b>를 이동할 수 있습니다.<br>
         ● 제목의 일부 단어로 검색 후에는 <b>이전/다음 제목 성가</b>로 이동할 수 있습니다.<br>
-        <!-- ● <b>전례성가</b>(1–95)는 제목이, <b>일반성가</b>(101–662)는 첫줄 가사가 제목이지만 제목이 따로 있는 성가도 있습니다.<br> -->
         ● 이 앱의 설치는 기도서 <b>앱설치 안내</b>를 참조하세요.<br>
         ● 아래 <b>“검색 시작”</b> 버튼을 눌러 검색 화면으로 이동하세요.
       </div>
@@ -222,6 +233,21 @@
 
     // popstate 감지 초기화
     history.pushState(null, null, location.href);
+
+
+
+  /**** 8) 로딩 안내 제어 ****/
+    function hideAppLoading() {
+      const loader = document.getElementById("appLoading");
+      if (loader) loader.style.display = "none";
+    }
+    window.addEventListener("load", () => setTimeout(hideAppLoading, 1200));
+    if ("serviceWorker" in navigator)
+      navigator.serviceWorker.ready.then(() => hideAppLoading());
+ 
+
+
+
   </script>
 </body>
 
