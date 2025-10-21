@@ -161,6 +161,34 @@
   </div>
 
   <script>
+    /**** 1) Service Worker 등록 ****/
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("/khymn/service-worker.js", { scope: "/khymn/" })
+          .then((reg) => {
+            if (reg.waiting) promptUpdate(reg);
+            reg.addEventListener("updatefound", () => {
+              const newSW = reg.installing;
+              if (!newSW) return;
+              newSW.addEventListener("statechange", () => {
+                if (newSW.state === "installed" && navigator.serviceWorker.controller) {
+                  promptUpdate(reg);
+                }
+              });
+            });
+            navigator.serviceWorker.addEventListener("controllerchange", () => window.location.reload());
+          })
+          .catch((err) => console.error("SW 등록 실패:", err));
+      });
+
+      function promptUpdate(reg) {
+        if (confirm("📢 새 버전이 있습니다. 지금 업데이트할까요?")) {
+          reg.waiting && reg.waiting.postMessage({ type: "SKIP_WAITING" });
+        }
+      }
+    }
+
     /**** 종료 메시지 제어 ****/
     let lastBackPress = 0;
     let toastTimer = null;
