@@ -2,12 +2,13 @@
 
 // 1️⃣ 기본 설정
 const CACHE_PREFIX = "khymn-";
-const VERSION = "v2025-10-21-02";
+const VERSION = "v2025-10-21-03";
 const CACHE_NAME = `${CACHE_PREFIX}${VERSION}`;
 
 // 2️⃣ 핵심 파일(업데이트 시마다 교체)
 const CORE_ASSETS = [
   "/khymn/index.html",
+  "/khymn/searchhymn.html",
   "/khymn/hymn-index-final.json",
   "/khymn/manifest.json",
   "/khymn/icon-192.png",
