@@ -3,7 +3,7 @@
 // 1) 앱 전용 프리픽스
 const CACHE_PREFIX = "khymn-";
 // 배포 시 이 값만 올리세요
-const VERSION = "v2025-10-24-01";
+const VERSION = "v2026-01-16-01";
 const CACHE_NAME = `${CACHE_PREFIX}${VERSION}`;
 
 // 2) 이 앱에 필요한 파일만 절대경로로
@@ -14,6 +14,7 @@ const ASSETS = [
   "/khymn/icon-192.png",
   "/khymn/icon-512.png",
   "/khymn/manifest.json",
+  "/khymn/service-worker.js",
   "/khymn/hymnbook.pdf",
   "/khymn/pdf.js",
   "/khymn/pdf.worker.js",
