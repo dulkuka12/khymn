@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>간략한 기도예식</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+
+  </style>
+
+</head>
+
+<body>
+
+  <main class="content">
+
+    <div class="rubric">이 예식은 단순한 예배를 원할 때 사용할 수 있으며 성가는 예배 전후 또는 신경 후에 삽입할 수가 있다.</div>
+    <br>
+    <div class="subtitle small-gap">1. 시작기도</div>
+    <div class="body-text">⧾ 주님께서 이제 여기에</div>
+    <div class="body-text2">◉ 우리와 함께 하소서.</div>
+    <div class="body-text">⧾ 기도합시다.</div>
+    <div class="rubric">인도자가 예배에 맞는 적절한 기도를 드리거나 그날의 본기도를 할 수 있다.</div>
+    </br>
+    <button class="common-button small-gap2" onclick="location.href='collect-list.html'">본기도 검색</button></br>
+    <button id="bookmarkCollectButton1" class="common-button2 small-gap2" onclick="goToRememberedCollect1()">책갈피1</button></br>
+    <button id="bookmarkCollectButton2" class="common-button2 small-gap2" onclick="goToRememberedCollect2()">책갈피1</button></br>
+    <br>
+
+    <div class="subtitle small-gap">2. 시편 교송</div>
+    <div class="rubric">그날의 성서와 맞는 시편을 교독하거나 아래의 시편을 교독할 수 있다.</div>
+    </br>
+    <button class="common-button" onclick="location.href='psalm-select.html'">시편 검색</button>
+    <button id="bookmarkPsalmButton" class="common-button2" onclick="goToRememberedPsalm()">책갈피</button>
+
+    <div class="subtitle small-gap">시편 100편</div>
+    <div class="body-text">1 온 세상이여, 주님께 환성을 올려라 ◯ 마음도 경쾌하게 주님을 섬겨라.</div>
+    <div class="body-text2">2 기쁜 노래 부르며 그분께 나아가거라. ◯ 주님은 하느님, 알아 모셔라.</div>
+    <div class="body-text">3 그가 우리를 내셨으니, 우리는 그의 것, 그의 백성, ◯ 그가 기르시는 양떼들이다.</div>
+    <div class="body-text2">4 감사기도 드리며 성문으로 들어가거라 ◯ 찬양노래 부르며 뜰 안으로 들어가거라.</div>
+    <div class="body-text">¶ 주님 어지시니 감사기도 드리며 ◯ 그 이름을 기리어라.</div>
+    <div class="body-text2">5 그의 사랑 영원하시니 ◯ 그 미쁘심 대대에 이르리라.</div>
+    <div class="body-text2">◉ 영광이 성부와 성자와 성령께 ◯ 처음과 같이 지금도 그리고 영원히, 아멘.</div>
+    <br>
+
+    <div class="subtitle small-gap">3. 성서독서</div>
+    <div class="rubric">통상적인 방법의 독서 후에 설교를 할 수 있다.</div>
+    <br>
+
+    <div class="subtitle small-gap">4. 사도신경 </div>
+    <div class="body-text">⧾ 나는 믿나이다</div>
+    <div class="body-text2">◉ 전능하신 하느님 아버지, 하늘과 땅의 창조주를 믿나이다.</div>
+    <div class="body-text2 indent1">하느님의 외아들, 주 예수 그리스도, 성령으로 동정녀 마리아에게 잉태되어 나시고, 본티오 빌라도 치하에서 고난을 받으시고, 십자가에 못 박혀 죽으시고 묻히셨으며,
+      죽음의 세계에 내려가시어 사흘 만에 죽은 자들 가운데서 부활하시고, 하늘에 올라 전능하신 하느님 오른편에 앉아 계시며, 산 이와 죽은 이를 심판하러 다시 오시리라 믿나이다.</div>
+    <div class="body-text2 small-gap indent1">성령을 믿으며, 거룩한 공교회와, 모든 성도의 상통을 믿으며, 죄의 용서와 몸의 부활을 믿으며, 영원한 생명을 믿나이다. 아멘</div>
+    <br>
+
+    <div class="subtitle small-gap">5. 교회와 세상을 위한 기도</div>
+    <div class="body-text">⧾ 교회와 세상을 위해 기도합시다.</div>
+    <div class="rubric">인도자는 ‘간구기도와 감사기도’에 수록된 기도 중에서 적절한 기도를 선택해서 하거나 또는 자유로운 대도를 할 수 있다</div>
+    </br>
+   
+     <button class="common-button small-gap2" onclick="location.href='prayer-select.html'">간구 검색</button><br>
+  
+    <!-- <button class="common-button small-gap2" 
+      onclick="rememberPosition('prayer', 'prayer-button'); location.href='prayer-select.html';">간구 검색</button></br>-->
+
+    <button id="bookmarkPrayerButton1" class="common-button2 small-gap2" onclick="goToRememberedPrayer1()">책갈피1</button></br>
+    <button id="bookmarkPrayerButton2" class="common-button2 small-gap2" onclick="goToRememberedPrayer2()">책갈피2</button></br>
+    <button id="bookmarkPrayerButton3" class="common-button2 small-gap2" onclick="goToRememberedPrayer3()">책갈피3</button></br>
+    <br>
+
+    <div class="subtitle small-gap">6. 주의 기도</div>
+    <div class="body-text">⧾ 주님께서 가르치신 대로 기도합시다.</div>
+    <div class="body-text2">◉ 하늘에 계신 우리 아버지, 온 세상이 아버지를 하느님으로 받들게 하시며, 아버지의 나라가 오게 하시며, 아버지의 뜻이 하늘에서와 같이, 땅에서도 이루어지게 하소서.</div>
+    <div class="body-text2 indent1">오늘 우리에게 필요한 양식을 주시고, 우리가 우리에게 잘못한 이를 용서하듯이, 우리의 잘못을 용서하시고, 우리를 유혹에 빠지지 않게 하시고 악에서 구하소서.</div>
+    <div class="body-text2 small-gap indent1">나라와 권세와 영광이 영원토록 아버지의 것이옵니다. 아멘</div>
+    <br>
+
+    <div class="subtitle small-gap">7. 마침기도</div>
+    <div class="body-text">⧾ 우리 주 예수 그리스도의 은총과 하느님의 사랑과 성령께서 이루어 주시는 친교가 우리와 항상 함께 하소서.</div>
+    <div class="body-text2">◉ 아멘</div>
+    <div class="content-end-spacer"></div>
+
+    <script src="main.js" defer></script>
+  </main>
+
+    <script>
+    </script>
+</body>
+
+</html>

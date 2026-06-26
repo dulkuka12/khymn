@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="stylesheet" href="style.css">
+  <title>감사성찬례 1형식</title>
+
+  <style>
+
+  </style>
+
+</head>
+
+<body>
+
+  <main class="content">
+
+    <button class="common-button2 small-gap2" onclick="location.href='proper-list.html'">성찬례 특정문 절기 선택하기</button><br>
+
+    <div class="big-title small-gap">개회예식</div>
+    <div class="subtitle small-gap">1. 입 당</div>
+    <div class="rubric">집전자와 예식 진행자들이 입당할 때에 성가를 부를 수 있다. 입당 순행이 없는 경우에도 알맞은 성가를 부를 수 있다.</div>
+    <div class="body-text">⧾ 성부와 성자와 성령의 이름으로</div>
+    <div class="body-text2 small-gap">◉ 아멘</div>
+
+    <div class="rubric small-gap">사순절이라면 대연도를 할 수 있다.</div>
+    <button class="common-button" onclick="location.href='great-litany-text.html'">대연도 보기</button>
+    <br>
+    <br>
+
+    <div class="subtitle small-gap">2. 개회기도</div>
+    <div class="body-text">⧾ 기도합시다.</div>
+    <div class="body-text">전능하신 하느님, 주님께서는 모든 사람의 마음과 소원을 다 아시며, 은밀한 것이라도 모르시는 바 없사오니, 성령의 감화하심으로 우리 마음의 온갖 생각을 정결하게
+      하시어, 주님을 진심으로 사랑하고 주님의 거룩하신 이름을 공경하여 찬송케 하소서. 우리 주 예수 그리스도의 이름으로 기도하나이다.</div>
+    <div class="body-text2">◉ 아멘</div>
+    <br>
+    <div class="rubric small-gap">사순절이나 참회의 절기에 죄의 고백 대신 할 수 있다.</div>
+    <button class="common-button small-gap2" onclick="location.href='litanies-text.html?fixed=1#section1'">참회연도
+      보기</button>
+    <br>
+    <br>
+
+    <div class="subtitle small-gap">3. 죄의 고백</div>
+    <div class="rubric small-gap">집전자는 아래의 권고문이나 다른 절기에 맞는 권고문을 선택한다. 경우에 따라 십계명으로 대신할 수 있다.</div>
+    <button class="common-button2" id="bookmarkProper1" onclick="goToProperBookmark(1)">책갈피A</button>
+    <button class="common-button" onclick="location.href='commandments-text.html'">십계명 보기</button>
+    <br>
+    <br>
+
+    <div class="body-text">⧾ 형제자매 여러분, 우리는 이 거룩한 성찬례를 합당하게 드리기 위하여 서로 화목하 며 겸손한 마음으로 우리 죄를 고백합시다.</div>
+
+    <div class="rubric">잠시 묵상한다.</div>
+
+    <div class="body-text2">◉ 자비하신 하느님, 우리는 생각과 말과 행실로 주님과 이웃에게 죄를 지었으며, 또한 자주 의무를 소홀히 하였나이다. 주여, 우리 죄를 용서하시고 우리로 하여금 예수
+      그리스도 안에서 새로워지게 하소서.</div>
+    <div class="body-text">⧾ 진실로 죄를 고백하는 모든 사람을 용서하시는 전능하신 하느님께서 여러분을 불쌍히 여기시어, 예수 그리스도의 공로로 모든 죄를 ✠ 용서하시고, 선행할 힘을 주시어
+      영원한
+      생명을 얻게 하소서.</div>
+    <div class="body-text2">◉ 아멘</div>
+    <br>
+
+    <div class="subtitle small-gap">4. 기원송가</div>
+    <div class="rubric">절기에 맞게 기원송을 사용한다. ‘영광송’은 사순절과 대림절, 별세성찬례에는 사용하지 않는다.</div>
+
+    <div class="subtitle4 accordion-header">1) 기리에</div>
+    <div class="accordion-content">
+      <div class="body-text">○ 주여, 우리를 불쌍히 여기소서.(기리에 엘레이손)</div>
+      <div class="body-text2">● 주여, 우리를 불쌍히 여기소서.(기리에 엘레이손)</div>
+      <div class="body-text">○ 그리스도여, 우리를 불쌍히 여기소서.(그리스데 엘레이손)</div>
+      <div class="body-text2">● 그리스도여, 우리를 불쌍히 여기소서.(그리스데 엘레이손)</div>
+      <div class="body-text">○ 주여, 우리를 불쌍히 여기소서.(기리에 엘레이손)</div>
+      <div class="body-text2">● 주여, 우리를 불쌍히 여기소서.(그리스데 엘레이손)</div>
+    </div>
+
+    <div class="subtitle4 accordion-header">2) 거룩하신 하느님</div>
+    <div class="accordion-content">
+      <div class="body-text">○ 거룩하신 하느님,</div>
+      <div class="body-text2">● 거룩하신 하느님,</div>
+      <div class="body-text">○ 거룩하시고 전능하신 주님,</div>
+      <div class="body-text2">● 거룩하시고 전능하신 주님,</div>
+      <div class="body-text">○ 거룩하시고 영원하신 주님, 자비를 베푸소서.</div>
+      <div class="body-text2">● 거룩하시고 영원하신 주님, 자비를 베푸소서.</div>
+    </div>
+
+    <div class="subtitle4 accordion-header">3) 우리에게 오시어</div>
+    <div class="accordion-content">
+      <div class="body-text">○ 주여, 우리에게 오시어 주님의 은혜로 이끌어 주소서.</div>
+      <div class="body-text2">● 주여, 우리에게 오시어 주님의 은혜로 이끌어 주소서.</div>
+      <div class="body-text">○ 그리스도여, 우리에게 오시어 주님의 사랑을 채워주소서.</div>
+      <div class="body-text2">● 그리스도여, 우리에게 오시어 주님의 사랑을 채워주소서.</div>
+      <div class="body-text">○ 주여, 우리에게 오시어 주님의 평화를 누리게 하소서.</div>
+      <div class="body-text2">● 주여, 우리에게 오시어 주님의 평화를 누리게 하소서.</div>
+    </div>
+    <div class="subtitle4 accordion-header">4) 영광송</div>
+    <div class="accordion-content">
+      <div class="body-text">○ 하늘 높은 곳에는 하느님께 영광,</div>
+      <div class="body-text2">● 땅에서는 그가 사랑하시는 사람들에게 평화!</div>
+      <div class="body-text">○ 주 하느님, 하늘의 임금이여,</div>
+      <div class="body-text2">● 전능하신 하느님 성부여,</div>
+      <div class="body-text">○ 주를 경배하오며 주께 감사하오며</div>
+      <div class="body-text2">● 주의 영광을 찬미하나이다.</div>
+      <div class="body-text">○ 주 예수 그리스도, 성부의 외아들이여,</div>
+      <div class="body-text2">● 주 하느님, 하느님의 어린양이여,</div>
+      <div class="body-text">○ 세상의 죄를 없애시는 주여,</div>
+      <div class="body-text2">● 우리를 불쌍히 여기소서.</div>
+      <div class="body-text">○ 성부 오른편에 앉아 계시는 주여,</div>
+      <div class="body-text2">● 우리의 기도를 들어주소서.</div>
+      <div class="body-text2">◉ 하느님 성부의 영광 안에 성령과 함께, 예수 그리스도 홀로 거룩하시고, 홀로 주님이시고, 홀로 높으시도다! 아멘</div>
+    </div>
+    <br>
+
+    <div class="big-title small-gap">말씀의 전례</div>
+    <div class="subtitle small-gap">5. 오늘의 본기도</div>
+    <div class="body-text">⧾ 주님께서 여러분과 함께</div>
+    <div class="body-text2">◉ 또한 사제와 함께 하소서.</div>
+    <div class="rubric">인사 후에 적절한 인사말을 하거나 그 날의 예배의향을 설명할 수 있다.</div>
+    <br>
+
+    <button class="common-button small-gap2" onclick="location.href='collect-list.html';">본기도 검색</button><br>
+    <button id="bookmarkCollectButton1" class="common-button2 small-gap2"
+      onclick="goToRememberedCollect1()">책갈피1</button><br>
+    <button id="bookmarkCollectButton2" class="common-button2 small-gap2"
+      onclick="goToRememberedCollect2()">책갈피2</button><br>
+
+    <div class="body-text">⧾ 기도합시다.</div>
+    <div class="rubric">이제 그 날의 본기도를 드린다.</div>
+    <div class="rubric">본기도 끝에 붙이는 송영은 다음 세 가지 유형 중에서 선택한다. 기도 호칭이 성자인 경우는 3번 송영을 사용한다.</div>
+    <div class="body-text">1) 성부와 성령과 함께 한 분 하느님이신 우리 주 예수 그리스도의 이름으로 기도하나이다. 아멘</div>
+    <div class="body-text">2) 성부 하느님께서는 성령 안에서 성자 예수 그리스도를 통하여 영원한 영광을 받으시나이다. 아멘</div>
+    <div class="body-text">3) 성자께서는 성부와 성령과 함께 영원히 사시며 다스리시나이다. 아멘</div>
+    <br>
+
+    <div class="subtitle small-gap">6. 첫째 독서</div>
+    <button class="common-button" onclick="location.href='lesson2-list.html';">정과표 검색</button>
+    <button id="bookmarkLessonButton2" class="common-button2" onclick="goToRememberedLesson2()">책갈피</button>
+    <br>
+    <br>
+
+    <div class="body-text">○ 첫째 독서는 ( )의 말씀입니다.</div>
+    <div class="rubric">다 읽은 다음에는 다음과 같이 말한다.</div>
+    <div class="body-text">○ 주님의 말씀입니다</div>
+    <div class="body-text2">◉ 하느님께 감사합니다.</div>
+    <div class="rubric">독서 후에 성가나 시편을 할 수 있다.</div>
+    <br>
+    <button class="common-button" onclick="location.href='psalm-select.html';">시편 검색</button>
+    <button id="bookmarkPsalmButton" class="common-button2" onclick="goToRememberedPsalm()">책갈피</button>
+    <br>
+    <br>
+
+    <div class="subtitle small-gap">7. 둘째 독서</div>
+    <div class="rubric">둘째독서가 있으면 첫째독서와 같은 방법으로 읽는다.</div>
+    <div class="body-text">○ 둘째 독서는 ( )의 말씀입니다.</div>
+    <div class="rubric">다 읽은 다음에는 다음과 같이 말한다.</div>
+    <div class="body-text">○ 주님의 말씀입니다</div>
+    <div class="body-text2">◉ 하느님께 감사합니다.</div>
+    <div class="rubric">독서 후에 성가나 시편을 할 수 있다.</div>
+    <br>
+
+    <div class="subtitle small-gap">8. 복음환호송</div>
+    <div class="rubric">복음 전에 복음환호송을 할 수 있다.</div>
+    <br>
+    <button class="common-button2" id="bookmarkProper2" onclick="goToProperBookmark(2)">책갈피B</button><br>
+    <br>
+ 
+    <div class="subtitle small-gap">9. 복음서</div>
+    <div class="body-text">⧾ 주님께서 여러분과 함께</div>
+    <div class="body-text2">◉ 또한 부제(사제)와 함께 하소서.</div>
+    <div class="body-text">⧾ 성 ( )가 전한 거룩한 복음입니다.</div>
+    <div class="body-text2">◉ 주님께 영광을 드립니다.</div>
+    <div class="rubric">다 읽은 후에는 다음과 같이 말한다.</div>
+    <div class="body-text">⧾ 주님의 복음입니다</div>
+    <div class="body-text2">◉ 그리스도를 찬미합니다.</div>
+    <div class="rubric">모두 앉고 복음 말씀을 잠시 묵상한다.</div>
+    <br>
+
+    <div class="subtitle small-gap">10. 설 교</div>
+    <br>
+ 
+    <div class="subtitle small-gap">11. 신앙고백</div>
+    <div class="rubric">니케아신경이나 사도신경 중에서 하나를 할 수 있다.</div>
+    <div class="rubric">주일과 대축일에는 니케아신경을 권장한다. 니케아신경은 집전자와 회중이 교송으로 할 수도 있다.</div>
+    <br>
+
+    <div class="subtitle4 accordion-header">1) 니케아신경</div>
+    <div class="accordion-content">
+      <div class="body-text">⧾ 우리의 신앙을 고백합시다.</div>
+      <div class="body-text2">◉ 우리는 믿나이다. 한 분이시며 전능하신 하느님 아버지, 하늘과 땅과 유형무형한 만물의 창조주를 믿나이다.</div>
+      <div class="body-text2 indent1">오직 한 분이신 주 예수 그리스도를 믿나니, 모든 세계에 앞서 성부께 나신 하느님의 외아들이시며, 하느님에게서 나신 하느님이시요, 빛에서 나신
+        빛이시오, 참 하느님에게서 나신 참 하느님으로서 창조되지 않고 나시어, 성부와 일체시며, 만물이 다 이 분으로 말미암아 창조되었으며, 우리 인간을 위하여, 우리의 구원을 위하여, 하늘에서 내려오시어,
+        성령으로 동정녀 마리아에게 혈육을 취하시고 사람이 되셨으며, 본티오 빌라도 치하에서 우리를 위하여 고난을 받으시고, 십자가에 못 박히시고 묻히셨으며, 성서 말씀대로 사흘 만에 부활하시고, 하늘에 올라
+        성부 오른편에 앉아 계시며, 산 이와 죽은 이를 심판하러, 영광 속에 다시 오시리니 그분의 나라는 끝이 없으리이다.</div>
+      <div class="body-text2 indent1">주님이시며 생명을 주시는 성령을 믿나니, 성령은 성부[와 성자]로부터 나오시며, 성부와 성자로 더불어 같은 경배와 영광을 받으시며, 예언자들을
+        통하여 말씀하셨나이다. 하나이요 거룩하고 사도로부터 이어오는 공교회와, 죄를 용서하는 하나의 세례를 믿으며, 죽은 이들의 부활과, 후세의 영생을 믿고 기다리나이다. 아멘</div>
+    </div>
+
+    <div class="subtitle4 accordion-header">2) 사도신경</div>
+    <div class="accordion-content">
+      <div class="body-text">⧾ 우리의 신앙을 고백합시다.</div>
+      <div class="body-text2">◉ 나는 믿나이다. 전능하신 하느님 아버지, 하늘과 땅의 창조주를 믿나이다.</div>
+      <div class="body-text2 indent1">하느님의 외아들, 우리 주 예수 그리스도, 성령으로 동정녀 마리아에게 잉태되어 나시고, 본티오 빌라도 치하에서 고난을 받으시고, 십자가에 못 박혀
+        죽으시고
+        묻히셨으며,
+        죽음의 세계에 내려가시어, 사흘 만에 죽은 자들 가운데서 부활하시고, 하늘에 올라 전능하신 하느님 오른편에 앉아 계시며, 산 이와 죽은 이를 심판하러 다시 오시리라 믿나이다.</div>
+      <div class="body-text2 indent1">성령을 믿으며, 거룩한 공교회와, 모든 성도의 상통을 믿으며, 죄의 용서와 몸의 부활을 믿으며, 영원한 생명을 믿나이다. 아멘</div>
+    </div>
+    <br>
+
+    <div class="subtitle small-gap">12. 교회와 세상을 위한 기도</div>
+
+    <div class="subtitle4 accordion-header">1양식 기도</div>
+    <div class="accordion-content">
+      <div class="body-text">⧾ 교회와 세상을 위하여 기도합시다.</div>
+      <div class="body-text">○ 교회를 위하여 기도합시다.</div>
+      <div class="rubric">각 기도마다 이 부분에서 구체적인 의향을 말할 수 있다.</div>
+      <div class="body-text">주여, 진리와 일치의 은총으로 항상 온 교회를 감화하시어, 모든 성직자 특별히 우리 주교 ( )와 모든 교인들이 서로 화목하며 합심하여 세상에 복음을 전함으로써
+        주님의
+        영광을 나타내게 하소서.</div>
+      <div class="body-text2">◉ 주여, 우리의 기도를 들어주소서.</div>
+      <div class="body-text">○ 세상의 정의와 평화를 위하여 기도합시다.</div>
+      <div class="body-text">주여, 이 세상에 평화를 주시고 특별히 우리나라 지도자들을 인도하시어, 악행과 악습을 막으시고 진리와 정의를 지켜주소서.</div>
+      <div class="body-text2">◉ 주여, 우리의 기도를 들어주소서.</div>
+      <div class="body-text">○ 가난한 사람들과 병자들과 어려움을 당한 모든 사람들을 위하여 기도합시다.</div>
+      <div class="body-text">주여, 이 변화 많은 세상에서 모든 근심하는 사람들과 병든 사람들을 위로하시고 건져 주소서.</div>
+      <div class="body-text2">◉ 주여, 우리의 기도를 들어주소서.</div>
+      <div class="rubric">여기에서 특별한 기도가 있으면 그 의향을 말하고 아래의 기도를 할 수 있다.</div>
+      <div class="body-text">주여, 우리의 소원을 살피시고 주님의 뜻대로 이루게 하소서.</div>
+      <div class="body-text2">◉ 주여, 우리의 기도를 들어주소서.</div>
+      <div class="body-text">○ 별세한 이들을 위하여 기도합시다.</div>
+      <div class="body-text">주여, 부활을 기다리는 모든 별세한 이들이 영원한 생명을 누리게 하소서.</div>
+      <div class="body-text2">◉ 주여, 우리의 기도를 들어주소서.</div>
+      <div class="body-text">○ 전능하신 하느님,</div>
+      <div class="body-text2">◉ 우리들이 예수 그리스도의 이름으로 간절히 기도하나이다. 아멘</div>
+    </div>
+
+    <div class="subtitle4 accordion-header">2양식 기도</div>
+    <div class="accordion-content">
+      <div class="subtitle"></div>
+      <div class="body-text">⧾ 교회와 세상을 위하여 기도합시다.</div>
+      <div class="rubric">교회를 위한 구체적인 기도의향을 언급할 수 있다.</div>
+      <div class="body-text">○ 영광의 하느님, 예수 그리스도의 이름으로 간구하는 우리의 기도를 들어 주신다고 약속하셨나이다. 간절히 비오니, 주님의 교회를 성령으로 채워 주시어 이 세상의
+        소금과 빛이 되게 하시며, 모든 신자들에게 새 힘과 용기를 주시어 말과 행실로 주님의 진리를 드러내게 하소서.</div>
+      <div class="body-text2">◉ 주여, 우리의 기도를 들어주소서.</div>
+      <div class="rubric">세상의 정의와 평화를 위한 구체적인 기도의향을 언급할 수 있다.</div>
+      <div class="body-text">○ 창조의 하느님, 우리와 모든 사람을 정의와 평화의 길로 인도하시나이다. 이제 우리로 하여금 이 땅에 올바른 정치와 공정한 경제를 세우게 하시고, 겨레의
+        화해와 통일을 이루게 하시어 그리스도께서 우리를 사랑하신 것과 같이 우리도 서로 사랑하며 살게 하소서.</div>
+      <div class="body-text2">◉ 주여, 우리의 기도를 들어주소서.</div>
+      <div class="rubric">고통받는 이웃을 위한 구체적인 기도의향을 언급할 수 있다.</div>
+      <div class="body-text">○ 희망의 하느님, 고난 속에 있는 사람들을 위로하시고 고통 받는 모든 사람에게 치유와 소생의 능력을 베풀어주시나이다. 이제 세상에서 고난과 고통 속에 있는
+        모든 사람을 도와주시고, 또한 우리에게 힘을 주시어, 주님의 본을 따라 그들과 더불어 살며 아픔을 함께 나누게 하소서.</div>
+      <div class="body-text2">◉ 주여, 우리의 기도를 들어주소서.</div>
+      <div class="rubric">별세한 이들을 위한 구체적인 기도의향을 언급할 수 있다.</div>
+      <div class="body-text">○ 생명의 하느님, 그리스도를 믿고 세상을 떠난 사람들을 하느님의 나라로 이끌어 주시나이다. 이제 별세한 사람들을 기억하며 드리는 우리의 간구를 들어 주시어,
+        그들이 생전에 지은 모든 죄를 그리스도의 공로로 용서받아 영원한 생명을 얻게 하소서.</div>
+      <div class="body-text2">◉ 주여, 우리의 기도를 들어주소서.</div>
+      <div class="body-text">○ 전능하신 하느님,</div>
+      <div class="body-text2">◉ 우리들이 예수 그리스도의 이름으로 간절히 기도하나이다. 아멘</div>
+
+    </div>
+    <div class="subtitle4 accordion-header">3양식 기도</div>
+    <div class="accordion-content">
+      <div class="body-text">⧾ 교회와 세상을 위하여 기도합시다.</div>
+      <div class="rubric">여기에서 전체기도 의향을 말할 수 있다.</div>
+      <div class="body-text">○ 자비하신 하느님, 주님의 몸 된 거룩한 교회를 위하여 기도하오니,</div>
+      <div class="body-text2">◉ 우리 모두 하나 되게 하소서.</div>
+      <div class="body-text">○ 모든 신자들이 진실하고 겸손하게 주님을 섬길 수 있도록 기도하오니,</div>
+      <div class="body-text2">◉ 주님의 이름이 모든 사람들로부터 영광 받으소서.</div>
+      <div class="body-text">○ 우리 주교와 사제와 부제들을 위하여 기도하오니,</div>
+      <div class="body-text2">◉ 그들이 주님의 말씀과 성사에 충실한 성직자가 되게 하소서.</div>
+      <div class="body-text">○ 모든 나라의 지도자들과 공직자들을 위하여 기도하오니,</div>
+      <div class="body-text2">◉ 이 지상에 정의와 평화가 깃들게 하소서.</div>
+      <div class="body-text">○ 우리가 하는 모든 일에서 주님의 뜻을 실천할 수 있도록 기도하오니,</div>
+      <div class="body-text2">◉ 우리에게 새 힘과 지혜를 주시고 우리의 삶을 축복하소서.</div>
+      <div class="body-text">○ 병들고 고난 받는 이들에게 자비를 베풀어 주시기를 기도하오니,</div>
+      <div class="body-text2">◉ 그들을 모든 어려움에서 구원하여 주소서.</div>
+      <div class="body-text">○ 별세한 이들의 영원한 안식을 위하여 기도하오니,</div>
+      <div class="body-text2">◉ 영원한 빛으로 그들을 비쳐 주소서.</div>
+      <div class="body-text">○ 전능하신 하느님,</div>
+      <div class="body-text2">◉ 우리가 예수 그리스도의 이름으로 간절히 기도하나이다. 아멘</div>
+    </div>
+    <br>
+    <button class="common-button small-gap2" onclick="location.href='litanies-select.html'">기타 연도문 보기</button>
+    <br>
+
+    <div class="big-title small-gap">성찬의 전례</div>
+    <div class="subtitle small-gap">13. 평화의 인사</div>
+    <div class="rubric">집전자는 아래의 인사서문이나 절기에 맞는 다른 서문을 선택할 수 있다.</div>
+    <div class="body-text">⧾ 여러분은 다함께 그리스도의 몸을 이루고 있으며 각 사람은 그 지체입니다. 그리스도께서는 자신을 희생하여 평화를 이룩하셨으니 우리는 하느님 안에서 하나가 됩시다.
+    </div>
+    <br>
+    <button class="common-button2" id="bookmarkProper3" onclick="goToProperBookmark(3)">책갈피C</button>
+    <br>
+    <br>
+    <div class="body-text">⧾ 주님의 평화가 여러분과 함께</div>
+    <div class="body-text2">◉ 또한 사제와 함께 하소서.</div>
+    <div class="body-text">⧾ 서로 평화의 축복을 나눕시다.</div>
+    <br>
+    <div class="subtitle small-gap">14. 봉헌 준비</div>
+    <div class="rubric">헌금하는 동안 성가를 한다. 봉헌이 준비되면 집전자는 아래의 기도나 절기에 맞는 다른 기도를 드린다.</div>
+    <div class="body-text">⧾ 기도합시다.</div>
+    <br>
+    <button class="common-button2" id="bookmarkProper4" onclick="goToProperBookmark(4)">책갈피D</button><br><br>
+
+    <div class="body-text">모든 것은 하느님께서 주신 것이기에 우리가 받은 것을 하느님께 바칩니다. 주여, 이것으로 당신의 복음을 세상에 전파하게 하소서.</div>
+    <div class="body-text2">◉ 아멘.</div>
+
+
+    <div class="rubric">집전자는 이제 다음의 성찬기도를 드린다.</div>
+    <br>
+
+    <div class="subtitle small-gap">15. 성찬기도</div>
+
+    <div id="ucharist1" class="subtitle4 accordion-header">감사기도 1양식</div>
+    <div class="accordion-content">
+      <div class="body-text">⧾ 주님께서 여러분과 함께</div>
+      <div class="body-text2">◉ 또한 사제와 함께 하소서.</div>
+      <div class="body-text">⧾ 마음을 드높이</div>
+      <div class="body-text2">◉ 주님께 올립니다.</div>
+      <div class="body-text">⧾ 우리 주 하느님께 감사합시다.</div>
+      <div class="body-text2">◉ 마땅하고 옳은 일입니다.</div>
+      <div class="body-text">⧾ 전능하신 하느님, 우리 주 예수 그리스도를 통하여 아버지께 언제 어디서나 감사와 찬양을 드림은 참으로 옳은 일이며 우리의 기쁨입니다.</div>
+      <div class="rubric">여기에서 절기에 따른 특송을 드린다.</div>
+      <br>
+      <button class="common-button2" id="bookmarkProper5"
+        onclick="saveUcharistAccordionState(); goToProperBookmark(5)">책갈피E</button><br>
+
+      <div class="body-text"> 그러므로 우리는 하늘의 모든 천사와 성도들과 함께 주님의 거룩하고 영광스러운 이름을 소리 높여 찬양하나이다.</div>
+      <div class="subtitle small-gap">거룩하시다(Sanctus)</div>
+      <div class="body-text2">◉ <strong>거룩하시다. 거룩하시다. 거룩하시도다. 만군의 주 하느님, 하늘과 땅에 가득한 그 영광, 높은 데에 호산나. 주의 이름으로 오시는 이여,
+          찬미받으소서. 높은
+          데에 호산나.</strong></div>
+      <div class="body-text">⧾ 모든 영광을 받으실 전능하신 하느님, 지극한 사랑으로 외아들 예수 그리스도를 이 세상에 보내셨으며, 그리스도께서는 우리의 구원을 위하여 십자가에 달리시고 세상의
+        죄를 없애시기 위하여 자신의 몸을 단 한번 온전한 희생 제물로 드리셨나이다. 또한 그 고귀한 죽음을 기념하도록 성찬의 제사를 세우시고 다시 오실 때까지 이를 행하라 하셨나이다.</div>
+      <div class="body-text"> 자비하신 하느님, 이제 우리의 기도를 들으시고 이 빵과 포도주를 성령으로 거룩하게 하시어 우리를 위하여 주 예수께서 말씀하신 구원의 ✠ 신비가 이루어지게 하소서.
+      </div>
+      <div class="body-text"> 그리스도께서는 수난하신 전날 밤에 빵을 들어 감사의 기도를 드리신 다음, 빵을 떼시고 제자들에게 나누어 주시며 말씀하셨나이다. “받아 먹어라. 이것은 너희를
+        위하여 주는 내 몸이니, 나를 기억하여 이 예를 행하라.”</div>
+      <div class="body-text"> 식후에 잔을 드시고 감사의 기도를 드리신 다음, 그들에게 주시며 말씀하셨나이다. “받아 마셔라. 이것은 죄를 용서해 주려고 너희들과 많은 사람을 위하여 내가
+        흘리는 새로운 계약의 피니, 마실 때마다 나를 기억하여 이 예를 행하라.”</div>
+      <div class="body-text">⧾ 우리는 신앙의 신비를 선포합니다.</div>
+      <div class="body-text2">◉ 그리스도는 죽으셨고, 그리스도는 부활하셨고, 그리스도는 다시 오십니다.</div>
+      <div class="body-text">⧾ 그러므로 우리는 예수 그리스도의 수난과 죽으심, 부활과 승천하심을 기억하며, 그리스도께서 다시 오실 때까지 이 빵과 포도주를 감사와 찬양의 제물로 드리나이다.
+      </div>
+      <div class="body-text"> 간절히 구하오니, 정성을 다해 드리는 우리의 감사제를 받으시고 온 세상의 교회가 예수 그리스도의 수난과 죽으심으로 이루신 구원의 은총을 얻게 하소서. 또한 이
+        생명의 빵과 구원의 잔을 받는 모든 이에게 성령을 내리시어 하늘의 축복을 나누게 하시고, 자신의 몸과 영혼을 하느님께 드리어 합당한 산 제물이 되며, 예수 그리스도와 한 몸이 되게 하소서.</div>
+      <div class="body-text"> 전능하신 하느님은 그리스도를 통하여, 그리스도와 함께, 그리스도 안에서, 성령과 하나되어 온갖 영예와 영광을 영원토록 받으시나이다.</div>
+      <div class="body-text2">◉ 아멘</div>
+    </div>
+
+    <div id="ucharist2" class="subtitle4 accordion-header">감사기도 2양식</div>
+    <div class="accordion-content">
+      <div class="body-text">⧾ 주님께서 여러분과 함께</div>
+      <div class="body-text2">◉ 또한 사제와 함께 하소서.</div>
+      <div class="body-text">⧾ 마음을 드높이</div>
+      <div class="body-text2">◉ 주님께 올립니다.</div>
+      <div class="body-text">⧾ 우리 주 하느님께 감사합시다.</div>
+      <div class="body-text2">◉ 마땅하고 옳은 일입니다.</div>
+      <c id="proper5"></c>
+      <div class="body-text">⧾ 전능하신 하느님, 우리 주 예수 그리스도를 통하여 아버지께 언제 어디서나 감사와 찬양을 드림은 참으로 옳은 일이며 우리의 기쁨입니다.</div>
+      <div class="rubric">여기에서 절기에 따른 특송을 드린다.</div>
+      <br>
+
+      <button class="common-button2" id="bookmarkProper5"
+        onclick="saveUcharistAccordionState(); goToProperBookmark(5)">책갈피E</button><br>
+
+      <div class="body-text">그러므로 우리는 하늘의 모든 천사와 성도들과 함께 주님의 거룩하고 영광스러운 이름을 소리 높여 찬양하나이다.</div>
+      <div class="subtitle">거룩하시다(Sanctus)</div>
+      <div class="body-text2">◉ 거룩하시다. 거룩하시다. 거룩하시도다. 만군의 주 하느님, 하늘과 땅에 가득한 그 영광, 높은 데에 호산나. 주의 이름으로 오시는 이여,
+        찬미받으소서. 높은
+        데에 호산나.</div>
+      <div class="body-text">⧾ 사랑이신 하느님, 주님께서는 말씀으로 이 세상을 창조하셨으며, 모든 피조물을 사랑하심으로 외아들 예수 그리스도를 이 땅에 보내시고, 십자가의 죽음과 부활로써
+        구원의
+        길을 열어주셨나이다.</div>
+      <div class="body-text">이제 주님의 말씀을 따라 감사와 찬양의 제사를 드리오니, 이 빵과 포도주 위에 성령을 내리시어 그리스도의 몸과 피로 이루신 새 언약의 ✠ 성사가 되게 하소서.
+      </div>
+      <div class="body-text">그리스도께서는 잡히시던 날 밤에 빵을 들어 찬양과 감사의 기도를 드리신 다음, 빵을 떼시고 제자들에게 나누어주시며 말씀하셨나이다. “받아 먹어라. 이것은 너희를
+        위하여
+        주는 내 몸이니, 나를 기억하여 이 예를</div>
+      <div class="body-text">행하라.”</div>
+      <div class="body-text">식후에 잔을 드시고 감사의 기도를 드리신 다음 그들에게 주시며 말씀하셨나이다. “받아 마셔라. 이것은 죄를 용서해 주려고 너희들과 많은 사람을 위하여 내가 흘리는
+        새로운
+        계약의 피니, 마실 때마다 나를 기억하여</div>
+      <div class="body-text">이 예를 행하라.”</div>
+      <div class="body-text">그러므로 우리는 이 생명의 빵과 구원의 잔을 주님 앞에 드리며, 십자가 위에 단 한번 바쳐진 예수 그리스도의 희생을 기억하고 영광 속에 다시 오실 때까지 그리스도의
+        죽음과
+        부활을 선포하나이다.</div>
+      <div class="body-text2">◉ <strong>그리스도의 죽음으로 죽음은 사라졌고, 그리스도의 부활로 새 생명을 얻었으니, 주 예수여 영광 속에 다시오소서.</strong></div>
+      <div class="body-text">⧾ 모든 생명의 주님, 구하오니, 하느님의 나라가 오는 그날까지 우리들이 서로 협력하여 이 세상에서 정의와 자비를 실천할 수 있도록 도와주소서. 또한 주님의 백성을
+        은혜로이 돌아보시고 하느님 사랑의 품으로</div>
+      <div class="body-text">모아주시어, 모든 성인들 [특별히 성....]와 함께 하늘의 영원한 잔치에 참여하게 하소서.</div>
+      <div class="body-text">전능하신 하느님은 그리스도를 통하여, 그리스도와 함께, 그리스도 안에서, 성령과 하나되어 온갖 영예와 영광을 영원토록 받으시나이다.</div>
+      <div class="body-text2">◉ 아멘</div>
+    </div>
+
+    <div id="ucharist3" class="subtitle4 accordion-header">감사기도 3양식</div>
+    <div class="accordion-content">
+      <div class="body-text">⧾ 주님께서 여러분과 함께</div>
+      <div class="body-text2">◉ 또한 사제와 함께 하소서.</div>
+      <div class="body-text">⧾ 마음을 드높이</div>
+      <div class="body-text2">◉ 주님께 올립니다.</div>
+      <div class="body-text">⧾ 우리 주 하느님께 감사합시다.</div>
+      <div class="body-text2">◉ 마땅하고 옳은 일입니다.</div>
+      <c id="proper5"></c>
+      <div class="body-text">⧾ 전능하신 하느님, 우리 주 예수 그리스도를 통하여 아버지께 언제 어디서나 감사와 찬양을 드림은 참으로 옳은 일이며 우리의 기쁨입니다.</div>
+      <div class="rubric">여기에서 절기에 따른 특송을 드린다.</div>
+      <br>
+      <button class="common-button2" id="bookmarkProper5"
+        onclick="saveUcharistAccordionState(); goToProperBookmark(5)">책갈피E</button><br>
+
+      <div class="body-text">그러므로 우리는 하늘의 모든 천사와 성도들과 함께 주님의 거룩하고 영광스러운 이름을 소리 높여 찬양하나이다.</div>
+      <div class="subtitle">거룩하시다(Sanctus)</div>
+      <div class="body-text2">◉ <strong>거룩하시다. 거룩하시다. 거룩하시도다. 만군의 주 하느님, 하늘과 땅에 가득한 그 영광, 높은 데에 호산나. 주의 이름으로 오시는 이여,
+          찬미받으소서. 높은
+          데에
+          호산나.</strong></div>
+      <div class="body-text">⧾ 거룩하시나이다. 전능하신 창조주 하느님, 거룩하시나이다. 구세주 예수 그리스도,</div>
+      <div class="body-text">거룩하시나이다. 생명을 주시는 성령, 주님께서는 사람도 거룩하도록 하느님의 형상대로 만드셨으나 사람은 죄에 빠졌나이다. 그러나 주님은 지극한 사랑으로 외아들 예수
+        그리스도를 동정녀 마리아에게 나게 하시고,</div>
+      <div class="body-text">누구든지 그를 믿는 사람은 멸망하지 않고 영원한 생명을 얻게 하시어 부활의 소망으로 살게 하시나이다.</div>
+      <div class="body-text">그리스도께서는 배반당하시던 날 밤에 빵을 들어 감사의 기도를 드리시고 축복하신 다음, 빵을 떼시고 제자들에게 나누어 주시며 말씀하셨나이다. “받아 먹어라. 이것은
+        너희를
+        위하여 주는 내 몸이니 나를 기억하여 이 예를 행하라.”</div>
+      <div class="body-text">식후에 잔을 드시고 감사의 기도를 드리신 다음, 그들에게 주시며 말씀하셨나이다. “받아 마셔라. 이것은 죄를 용서해 주려고 너희들과 많은 사람을 위하여 내가 흘리는
+        새로운 계약의 피니 마실 때마다 나를 기억하여 이 예를 행하라.”</div>
+      <div class="body-text">그러므로 우리를 위하여 죽으시고 묻히셨으나 사흘 만에 부활하셨으며, 하늘에 올라 성부 오른편에 앉으시고 영광 속에 다시 오실 성자 예수 그리스도를 기념하며 이
+        감사의
+        예물을 주님께 바치오니 기쁨으로 받아주소서.</div>
+      <div class="body-text2">◉ 그리스도의 죽음으로 죽음은 사라졌고, 그리스도의 부활로 새 생명을 얻었으니, 주 예수여 영광 속에 다시오소서.</div>
+      <div class="body-text">주여, 피흘림 없이 합당하게 드리는 이 제사를 받으시고, 우리와 이 예물 위에 성령을 내리시어, 이 빵과 포도주가 우리를 위한 주님의 고귀하신 ✠ 몸과 피가 되게
+        하소서. 또한 이 성사를 받는 모든 이들이 죄를 용서받아 정결한 마음으로 주님 앞에 나아가게 하소서.</div>
+      <div class="body-text">겸손히 비오니, 거룩한 교회의 모든 주교와 사제와 부제를 기억하시어 그들이 주님의 말씀을 올바로 보전하며 가르치게 하시고, 주님을 섬기는 모든 신자들도 주님의
+        자비하심을
+        입어 한마음으로 주님을 찬양하게 하소서.</div>
+      <div class="body-text">또한 영생과 부활의 희망 속에 고이잠든 이들 [특별히 ........... ]를 기억하시고 그들이 주님의 빛 가운데서 영원한 안식을 누리게 하소서.</div>
+      <div class="body-text">전능하신 하느님은 그리스도를 통하여, 그리스도와 함께, 그리스도 안에서, 성령과 하나되어 온갖 영예와 영광을 영원토록 받으시나이다.</div>
+      <div class="body-text2">◉ 아멘</div>
+      <div class="rubric">주의 기도로 계속한다.</div>
+    </div>
+
+    <div class="subtitle4 accordion-header">감사기도 4양식</div>
+    <div class="accordion-content">
+      <div class="body-text">⧾ 주님께서 여러분과 함께</div>
+      <div class="body-text2">◉ 또한 사제와 함께 하소서.</div>
+      <div class="body-text">⧾ 마음을 드높이</div>
+      <div class="body-text2">◉ 주님께 올립니다.</div>
+      <div class="body-text">⧾ 우리 주 하느님께 감사합시다.</div>
+      <div class="body-text2">◉ 마땅하고 옳은 일입니다.</div>
+      <div class="body-text">⧾ 오직 한 분이시며 참되신 하느님 성부여, 아버지께 언제 어디서나 감사와 찬양을 드림은 참으로 옳은 일이며 우리의 기쁨입니다.<br>
+        주님은 태초부터 우리가 영원히 미치지 못할 빛 속에 계시오며, 생명의 샘이시요, 모든 선의 근원이 되시나이다. 또한 주님은 만물을 지으시고 축복으로 채우시며, 경이로운
+        빛 가운데 기쁨을 누리며 살게 하셨나이다.<br>
+        그러므로 하늘의 무수한 천사들이 밤낮으로 주님을 섬기고, 그 빛나는 얼굴을 뵈오며 끊임없이 찬양하오니, 우리도 그들과 함께 하늘 아래 만물과 더불어 주님의 거룩하고
+        영광스러운 이름을 소리 높여 찬양하나이다.</div>
+      <div class="subtitle">거룩하시다(Sanctus)</div>
+      <div class="body-text2">◉ 거룩하시다. 거룩하시다. 거룩하시도다. 만군의 주 하느님, 하늘과 땅에 가득한 그 영광, 높은 데에 호산나. 주의 이름으로 오시는 이여,
+        찬미받으소서. 높은
+        데에
+        호산나.</div>
+      <div class="body-text">⧾ 지극한 영광과 권능 가운데 계신 거룩하신 하느님, 주님께서는 지혜와 사랑으로 만물을 지으셨으며, 하느님의 형상대로 우리를 창조하시고, 주님께 순종하고 모든
+        피조물을
+        돌보며 살게 하셨나이다. 우리가 불순종으로 주님을 멀리 떠났을 때에도 우리를 죽음의 그늘 아래 버려두지 않으시고, 예수 그리스도를 성령으로 동정녀 마리아에게 나게 하시어 크신 사랑을 나타내셨나이다.
+        이
+        세상에 오신 그리스도께서는 가난한 자에게 구원의 복음을, 갇힌 자에게 자유를, 슬퍼하는 자에게 기쁨을 주셨으며, 아버지의 뜻을 이루시고자 스스로 고난을 당하셨으나, 무덤에서 부활하심으로 죽음을
+        이기시고 온
+        세상 피조물을 새롭게 하셨나이다.</div>
+      <div class="body-text">성부 하느님께로부터 영광 받으실 때가 이르러 그리스도께서는 제자들과 만찬을 함께 하시던 중에, 빵을 들어 성부께 감사드리신 다음 떼어 제자들에게 주시며
+        말씀하셨나이다.
+        “받아 먹어라. 이것은 너희를 위하여 주는 내 몸이니, 나를 기억하여 이 예를 행하라.”</div>
+      <div class="body-text">식후에 잔을 드시고 감사드리신 다음, 그들에게 주시며 말씀하셨나이다. “받아 마셔라. 이것은 너희와 많은 사람의 죄를 용서하기 위하여 내가 흘리는 새로운 계약의
+        피니,
+        마실 때마다 나를 기억하여 이 예를 행하라.”</div>
+      <div class="body-text">그러므로 이제 우리가 이 예를 드리며 그리스도의 죽으심을 기억하고, 그리스도의 부활과 성부 오른편에 승천하심을 선포하나이다. 또한 영광 속에 다시 오실 것을
+        기다리며,
+        우리의 구원을 기념하여 이 빵과 포도주를 주님께 봉헌하나이다.</div>
+      <div class="body-text2">◉ 그리스도의 죽음으로 죽음은 사라졌고, 그리스도의 부활로 새 생명을 얻었으니, 주 예수여 영광 속에 다시오소서.</div>
+      <div class="body-text">주여, 당신의 선하심과 자비하심으로 우리와 이 예물 위에 성령을 내리시고 거룩하게 하시어, 주님의 백성을 위한 예수 그리스도의 몸과 피이며, ✠ 생명의 빵과 구원의
+        잔이
+        되게 하시고, 이 거룩한 선물을 나누는 모든 이들이 한 마음, 한 몸을 이루게 하시어 그리스도 안에서 거룩한 산 제물이 되게 하소서.</div>
+      <div class="body-text">간절히 구하오니, 그리스도의 피로 구원하신 하나이며 거룩하고 사도로부터 이어오는 교회를 기억하시어, 우리의 신앙을 지켜주시고, 교회의 일치를 드러내며 평화를
+        보존하게
+        하소서. 또한 주님의 몸된 교회에 속한 모든 백성들을 기억하시어 복되신 동정녀 마리아와 모든 성인들과 함께 하늘의 유산을 받게 하시고, 그들과 연합하여 우리 주 예수 그리스도의 이름으로 항상 주님을
+        찬양하게 하소서.</div>
+      <div class="body-text">전능하신 하느님은 그리스도를 통하여, 그리스도와 함께, 그리스도 안에서, 성령과 하나되어 온갖 영예와 영광을 영원토록 받으시나이다.</div>
+      <div class="body-text2">◉ 아멘</div>
+    </div>
+    <br>
+
+    <div class="subtitle small-gap">16. 주의 기도</div>
+    <div class="body-text">⧾ 우리 구세주 그리스도께서 가르치신 대로 기도합시다.</div>
+    <div class="body-text2">◉ 하늘에 계신 우리 아버지, 온 세상이 아버지를 하느님으로 받들게 하시며, 아버지의 나라가 오게 하시며, 아버지의 뜻이 하늘에서와 같이 땅에서도 이루어지게 하소서.
+    </div>
+    <div class="body-text2 indent1">오늘 우리에게 필요한 양식을 주시고, 우리가 우리에게 잘못한 이를 용서하듯이, 우리의 잘못을 용서하시고, 우리를 유혹에 빠지지 않게 하시고, 악에서
+      구하소서.
+    </div>
+    <div class="body-text2 indent1">나라와 권세와 영광이 영원토록 아버지의 것이옵니다. 아멘</div>
+    <br>
+
+    <div class="subtitle small-gap">17. 성체나눔</div>
+    <div class="rubric">집전자는 빵을 떼어 보이면서 말한다.</div>
+    <div class="body-text">⧾ 우리는 이 빵을 떼어 주님의 성체를 나눕니다.</div>
+    <div class="body-text2">◉ 우리는 서로 다르나 한 빵을 나누며 한 몸을 이룹니다.</div>
+    <div class="rubric">빵을 떼는 동안 침묵할 수 있다.</div>
+
+    <div class="subtitle small-gap">하느님의 어린양(Agnus Dei)</div>
+    <div class="body-text2">◉ 하느님의 어린 양, 세상의 죄를 없애시는 주여, 우리를 불쌍히 여기소서.</div>
+    <div class="body-text2"> 하느님의 어린 양, 세상의 죄를 없애시는 주여, 우리를 불쌍히 여기소서.</div>
+    <div class="body-text2"> 하느님의 어린 양, 세상의 죄를 없애시는 주여, 우리에게 평화를 주소서.</div>
+    <br>
+
+    <div class="subtitle small-gap">18. 영성체</div>
+    <div class="rubric">집전자는 다음 성찬초대의 말을 한다.</div>
+    <div class="body-text">⧾ 세상의 죄를 없애시는 하느님의 어린양이 여기 계시니, 이 성찬에 초대받은 이는 복되도다.</div>
+    <div class="body-text2">◉ 주여, 주님을 제 안에 모시기를 감당치 못하오니, 한 말씀만 하소서. 제 영혼이 곧 나으리이다.</div>
+    <div class="rubric">집전자가 성체를 영할 때 다음과 같이 말한다.</div>
+    <div class="body-text">⧾ 그리스도의 성체와 보혈은 나를 지키시어 영생에 이르게 하소서.</div>
+    <div class="rubric">성체와 보혈을 나눌 때에 다음과 같이 말한다.</div>
+    <div class="body-text">⧾ 그리스도의 성체[보혈]</div>
+    <div class="body-text2">◉ 아멘</div>
+    <br>
+
+    <div class="subtitle small-gap"> 영성체후 기도</div>
+    <div class="body-text">⧾ 기도합시다.</div>
+    <div class="rubric">집전자는 아래의 기도나 절기에 맞는 다른 영성체 후 기도를 선택한다.</div>
+    <br>
+    <button class="common-button2" id="bookmarkProper6" onclick="goToProperBookmark(6)">책갈피F</button><br><br>
+
+    <div class="body-text">⧾ 전능하신 하느님, 주님께서는 그리스도의 성체와 보혈을 신령한 양식으로 우리에게 먹이심으로써 그리스도의 몸과 하나 되게 하셨으니 감사하나이다. 간절히 구하오니,
+      우리를
+      성령으로 도우시어 사랑 가운데 서로 상통하며 주님께서 명하신 일을 이루게 하소서. 우리 주 예수 그리스도의 이름으로 기도하나이다.</div>
+    <div class="body-text2">◉ 아멘</div>
+    <br>
+    <div class="big-title small-gap">파송예식</div>
+    <div class="body-text">20. 축복기도</div>
+    <div class="body-text">⧾ 주님께서 여러분과 함께</div>
+    <div class="body-text2">◉ 또한 사제와 함께 하소서.</div>
+    <div class="rubric">집전자는 절기에 맞는 다른 축복문을 선택할 수 있다.</div>
+    <br>
+    <button class="common-button2" id="bookmarkProper7" onclick="goToProperBookmark(7)">책갈피G</button>
+    <br>
+    <br>
+    <div class="body-text">⧾ 하느님의 무한하신 평화가 교우들과 함께 하시어, 우리 주 예수 그리스도의 사랑 안에 항상 머무르게 하시고, 전능하신 하느님 ✠ 성부와 성자와 성령은 여러분에게
+      강복하소서.</div>
+    <div class="body-text2">◉ 아멘</div>
+    <div class="body-text">21. 파 송</div>
+    <div class="rubric">집전자는 다음 가운데 하나로 파송 선언을 한다.</div>
+    <div class="body-text"> 1) 나가서 주님의 복음을 전합시다.</div>
+    <div class="body-text"> 2) 나가서 주님의 평화를 이룹시다.</div>
+    <div class="body-text"> 3) 나가서 주님의 사랑을 나눕시다.</div>
+    <div class="body-text2">◉ 그리스도의 이름으로. 아멘</div>
+    <div class="rubric">부활절에는;</div>
+    <div class="body-text">⧾ 나가서 주님의 부활을 전합시다. 알렐루야, 알렐루야.</div>
+    <div class="body-text2">◉ 그리스도의 이름으로. 알렐루야, 알렐루야.</div>
+    <div class="rubric">파송성가를 할 수 있다.</div>
+    <div class="content-end-spacer"></div>
+
+    <script src="main.js" defer></script>
+  </main>
+
+  <script>
+    /* 성찬기도가 특송 책갈피로 접히지 않게*/
+    document.addEventListener("DOMContentLoaded", function () {
+      const headers = document.querySelectorAll(".accordion-header");
+
+      headers.forEach(header => {
+        header.addEventListener("click", function () {
+          const content = this.nextElementSibling;
+          const isOpen = content.style.maxHeight && content.style.maxHeight !== "0px";
+
+          if (isOpen) {
+            content.style.maxHeight = "0px";
+            this.classList.remove("open");
+          } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+            this.classList.add("open");
+
+            setTimeout(() => {
+              this.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 200);
+          }
+        });
+      });
+
+
+      // 📌 성찬기도만 복원
+      restoreUcharistAccordionState();
+    });
+
+    // ✅ 오직 성찬기도에 대해서만 복원
+    function restoreUcharistAccordionState() {
+      const saved = localStorage.getItem("ucharistOpenState");
+      if (!saved) return;
+
+      const openIds = JSON.parse(saved);
+      openIds.forEach(id => {
+        const header = document.getElementById(id);
+        if (header && header.classList.contains("accordion-header") && id.startsWith("ucharist")) {
+          const content = header.nextElementSibling;
+          content.style.maxHeight = content.scrollHeight + "px";
+          header.classList.add("open");
+        }
+      });
+
+      // 🎯 복원 후 즉시 삭제
+      localStorage.removeItem("ucharistOpenState");
+    }
+
+    // 📦 성찬기도 책갈피 이동 시 상태 저장용
+    function saveUcharistAccordionState() {
+      const opened = [];
+      document.querySelectorAll('.accordion-header[id^="ucharist"]').forEach(header => {
+        const content = header.nextElementSibling;
+        if (content && content.style.maxHeight && content.style.maxHeight !== "0px") {
+          opened.push(header.id);
+        }
+      });
+      localStorage.setItem("ucharistOpenState", JSON.stringify(opened));
+    }
+
+  </script>
+
+</body>
+
+
+</html>
+
