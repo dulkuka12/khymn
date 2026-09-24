@@ -416,20 +416,19 @@
     window.addEventListener("popstate", () => {
       // 검색 결과/입력값/책갈피 팝업이 있으면 먼저 검색 기본화면으로 돌아간다.
       if (resetSearchScreen()) {
-        history.pushState({ khymnGuard: true }, "", location.href);
+        // 검색화면에서 검색대기화면으로 돌아온 직후에도
+        // 다음 뒤로가기를 반드시 "첫 번째" 뒤로가기로 처리한다.
         lastBackPress = 0;
+        history.replaceState({ khymnBase: true }, "", location.href);
+        history.pushState({ khymnGuard: true }, "", location.href);
         return;
       }
 
       // 이미 검색 기본화면이면 두 번 눌러 종료한다.
       const now = Date.now();
       if (now - lastBackPress < 2000) {
-        showBackToast("👋 앱을 종료합니다.");
-        setTimeout(() => {
-          // index.html은 시작할 때 location.replace()로 교체되므로
-          // 뒤로가기를 하면 시작화면을 거치지 않고 앱 바깥으로 나간다.
-          history.back();
-        }, 500);
+        // 두 번째 뒤로가기는 별도 메시지 없이 즉시 앱 밖으로 나간다.
+        history.go(-2);
       } else {
         showBackToast("한 번 더 누르면 종료합니다.");
         lastBackPress = now;
