@@ -421,8 +421,9 @@
       if (now - lastBackPress < 2000) {
         showBackToast("👋 앱을 종료합니다.");
         setTimeout(() => {
-          // 시작화면(index.html)이 보이지 않도록 현재 PWA 창을 종료 방향으로 보낸다.
-          history.go(-2);
+          // index.html은 시작할 때 location.replace()로 교체되므로
+          // 뒤로가기를 하면 시작화면을 거치지 않고 앱 바깥으로 나간다.
+          history.back();
         }, 500);
       } else {
         showBackToast("한 번 더 누르면 종료합니다.");
