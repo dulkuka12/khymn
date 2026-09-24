@@ -204,6 +204,7 @@
 
     /**** 4) 상태 변수 ****/
     let pdfDoc = null, hymnIndex = [], bookmarks = [];
+    let renderGeneration = 0;
     let indexLoaded = false, lastShownNumber = null;
     let lastQueryIsNumeric = true, lastTitleMatchIndices = [], lastTitleMatchPos = -1;
 
@@ -280,6 +281,7 @@
     }
 
     async function renderPages(start, end) {
+      const myGeneration = ++renderGeneration;
       const viewer = document.getElementById("pdfViewer");
       viewer.innerHTML = "";
       for (let p = start; p <= end; p++) {
@@ -290,6 +292,7 @@
         canvas.width = vp.width;
         canvas.height = vp.height;
         await page.render({ canvasContext: ctx, viewport: vp }).promise;
+        if (myGeneration !== renderGeneration) return;
         viewer.appendChild(canvas);
       }
       window.scrollTo({ top: 0 });
@@ -366,6 +369,8 @@
       if (!hasSearchState) return false;
 
       if (input) input.value = "";
+      // 진행 중인 PDF 렌더링을 무효화하여 초기화 뒤 canvas가 다시 붙는 것을 막는다.
+      renderGeneration++;
       lastShownNumber = null;
       lastQueryIsNumeric = true;
       lastTitleMatchIndices = [];
