@@ -386,8 +386,8 @@
       window.scrollTo({ top: 0 });
       // 입력창이 아닌 안내 영역에 포커스를 주어 키보드는 띄우지 않는다.
       if (viewer) {
-        try { viewer.focus({ preventScroll: true }); }
-        catch (e) { viewer.focus(); }
+        try { input.focus({ preventScroll: true }); }
+        catch (e) { input.focus(); }
       }
     }
 
