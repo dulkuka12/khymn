@@ -151,10 +151,15 @@
     body {
       overscroll-behavior: contain;
     }
+
+    /* 뒤로가기 안내 메시지 */
+    #toastMessage { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.75); color:#fff; padding:10px 20px; border-radius:20px; z-index:9999; opacity:0; transition:opacity .3s; pointer-events:none; white-space:nowrap; }
   </style>
 </head>
 
 <body>
+
+  <div id="toastMessage"></div>
 
   <!-- 상단 툴바 -->
   <div class="toolbar">
@@ -277,6 +282,7 @@
       const end = item.end ? Number(item.end) : page;
       renderPages(page, end);
       lastShownNumber = item.number;
+      ensureResultHistory();
     }
 
     async function renderPages(start, end) {
@@ -343,6 +349,37 @@
     if ("serviceWorker" in navigator)
       navigator.serviceWorker.ready.then(() => hideAppLoading());
 
+
+
+
+    /**** 11) 뒤로가기: 검색 결과만 먼저 닫기 ****/
+    function resetSearchScreen() {
+      const viewer = document.getElementById("pdfViewer");
+      const input = document.getElementById("searchInput");
+      input.value = "";
+      lastShownNumber = null;
+      lastTitleMatchIndices = [];
+      lastTitleMatchPos = -1;
+      viewer.innerHTML = `<div class="notice-box"><div class="notice-title">🔍 성가 검색</div><div class="notice-desc">성가번호나 제목의 단어을 입력하고 엔터키를 누르세요.<br>좌우 화살표를 누르면 다음 번호나 단어 성가를 찾아갑니다.</div></div>`;
+      window.scrollTo({ top: 0 });
+    }
+
+    // 검색 결과가 보이는 동안만 가상 history 한 칸을 둔다.
+    let resultHistoryAdded = false;
+    function ensureResultHistory() {
+      if (!resultHistoryAdded) {
+        history.pushState({ hymnResult: true }, "", location.href);
+        resultHistoryAdded = true;
+      }
+    }
+
+    window.addEventListener("popstate", () => {
+      if (lastShownNumber !== null) {
+        resetSearchScreen();
+        resultHistoryAdded = false;
+        // 여기서는 history를 다시 만들지 않는다. 다음 뒤로가기는 index.html(시작화면)로 간다.
+      }
+    });
 
   </script>
 </body>

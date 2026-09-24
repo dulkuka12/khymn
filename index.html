@@ -274,11 +274,8 @@
     function handleBackPress() {
       const now = Date.now();
       if (now - lastBackPress < 2000) {
-        showToast("👋 앱을 종료합니다.");
-        setTimeout(() => {
-          if (window.history.length > 1) history.back();
-          else location.href = "about:blank";
-        }, 800);
+        // 두 번째 뒤로가기는 별도 메시지 없이 바로 앱 밖으로 이동
+        history.back();
       } else {
         showToast("한 번 더 누르면 종료합니다.");
         lastBackPress = now;
