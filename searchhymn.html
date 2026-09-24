@@ -172,7 +172,7 @@
   </div>
 
   <!-- 안내문 -->
-  <div id="pdfViewer" style="padding:24px;">
+  <div id="pdfViewer" tabindex="-1" style="padding:24px; outline:none;">
     <div class="notice-box">
       <div class="notice-title">🔍 성가 검색</div>
       <div class="notice-desc">성가번호나 제목의 단어을 입력하고 엔터키를 누르세요.<br>
@@ -384,6 +384,11 @@
           </div>`;
       }
       window.scrollTo({ top: 0 });
+      // 입력창이 아닌 안내 영역에 포커스를 주어 키보드는 띄우지 않는다.
+      if (viewer) {
+        try { viewer.focus({ preventScroll: true }); }
+        catch (e) { viewer.focus(); }
+      }
     }
 
     function showBackToast(message) {
