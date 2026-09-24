@@ -428,7 +428,7 @@
       const now = Date.now();
       if (now - lastBackPress < 2000) {
         // 두 번째 뒤로가기는 별도 메시지 없이 즉시 앱 밖으로 나간다.
-        history.go(-2);
+        history.go(-1);
       } else {
         showBackToast("한 번 더 누르면 종료합니다.");
         lastBackPress = now;
