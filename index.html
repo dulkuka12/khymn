@@ -174,7 +174,7 @@
     </div>
 
     <div class="button-row">
-      <button class="start-btn" onclick="location.replace('searchhymn.html')">시작</button>
+      <button class="start-btn" onclick="location.href='searchhymn.html'">시작</button>
       <button id="installBtn" class="install-btn" disabled>앱 설치</button>
     </div>
   </div>
@@ -262,8 +262,39 @@
 
 
 
-    // 시작화면에서는 별도의 history 항목을 만들지 않습니다.
-    // 시작 버튼의 location.replace()가 index.html을 searchhymn.html로 완전히 교체합니다.
+    /**** 종료 메시지 제어 ****/
+    let lastBackPress = 0;
+    let toastTimer = null;
+
+    window.addEventListener("popstate", (event) => {
+      handleBackPress();
+      history.pushState(null, null, location.href);
+    });
+
+    function handleBackPress() {
+      const now = Date.now();
+      if (now - lastBackPress < 2000) {
+        showToast("👋 앱을 종료합니다.");
+        setTimeout(() => {
+          if (window.history.length > 1) history.back();
+          else location.href = "about:blank";
+        }, 800);
+      } else {
+        showToast("한 번 더 누르면 종료합니다.");
+        lastBackPress = now;
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toastMessage");
+      toast.textContent = message;
+      toast.style.opacity = "1";
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => (toast.style.opacity = "0"), 1500);
+    }
+
+    // popstate 감지 초기화
+    history.pushState(null, null, location.href);
 
 
   </script>

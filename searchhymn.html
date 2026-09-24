@@ -172,11 +172,11 @@
   </div>
 
   <!-- 안내문 -->
-  <div id="pdfViewer" tabindex="-1" style="padding:24px; outline:none;">
+  <div id="pdfViewer" style="padding:24px;">
     <div class="notice-box">
       <div class="notice-title">🔍 성가 검색</div>
       <div class="notice-desc">성가번호나 제목의 단어을 입력하고 엔터키를 누르세요.<br>
-        좌우 화살표를 누르면 다음 번호나 다음 단어 성가를 찾아갑니다.
+        좌우 화살표를 누르면 다음 번호나 단어 성가를 찾아갑니다.
       </div>
     </div>
   </div>
@@ -204,10 +204,8 @@
 
     /**** 4) 상태 변수 ****/
     let pdfDoc = null, hymnIndex = [], bookmarks = [];
-    let renderGeneration = 0;
     let indexLoaded = false, lastShownNumber = null;
     let lastQueryIsNumeric = true, lastTitleMatchIndices = [], lastTitleMatchPos = -1;
-    let searchHistoryActive = false;
 
     /**** 5) 초기화 ****/
     async function initOnce() {
@@ -274,12 +272,6 @@
 
     /**** 8) 이동 및 렌더링 ****/
     async function navigateToIndex(idx) {
-      // 검색 결과를 처음 표시할 때만 검색 상태를 history에 한 단계 추가한다.
-      // 이후 좌우 이동은 같은 검색 상태 안에서 처리한다.
-      if (!searchHistoryActive) {
-        history.pushState({ khymnSearch: true }, "", location.href);
-        searchHistoryActive = true;
-      }
       const item = hymnIndex[idx];
       const page = Number(item.page);
       const end = item.end ? Number(item.end) : page;
@@ -288,7 +280,6 @@
     }
 
     async function renderPages(start, end) {
-      const myGeneration = ++renderGeneration;
       const viewer = document.getElementById("pdfViewer");
       viewer.innerHTML = "";
       for (let p = start; p <= end; p++) {
@@ -299,7 +290,6 @@
         canvas.width = vp.width;
         canvas.height = vp.height;
         await page.render({ canvasContext: ctx, viewport: vp }).promise;
-        if (myGeneration !== renderGeneration) return;
         viewer.appendChild(canvas);
       }
       window.scrollTo({ top: 0 });
@@ -352,92 +342,6 @@
     window.addEventListener("load", () => setTimeout(hideAppLoading, 1200));
     if ("serviceWorker" in navigator)
       navigator.serviceWorker.ready.then(() => hideAppLoading());
-
-
-    /**** 11) 안드로이드 뒤로가기 제어 ****/
-    let lastBackPress = 0;
-    let backToastTimer = null;
-
-    function resetSearchScreen() {
-      const input = document.getElementById("searchInput");
-      const viewer = document.getElementById("pdfViewer");
-      const popup = document.getElementById("bookmarkPopup");
-
-      if (popup && popup.style.display === "block") closeBookmarkPopup();
-      if (input) input.value = "";
-
-      renderGeneration++;
-      lastShownNumber = null;
-      lastQueryIsNumeric = true;
-      lastTitleMatchIndices = [];
-      lastTitleMatchPos = -1;
-      searchHistoryActive = false;
-      lastBackPress = 0;
-
-      if (viewer) {
-        viewer.innerHTML = `
-          <div class="notice-box">
-            <div class="notice-title">🔍 성가 검색</div>
-            <div class="notice-desc">성가번호나 제목의 단어을 입력하고 엔터키를 누르세요.<br>
-              좌우 화살표를 누르면 다음 번호나 다음 단어 성가를 찾아갑니다.
-            </div>
-          </div>`;
-      }
-      window.scrollTo({ top: 0 });
-      // 입력창이 아닌 안내 영역에 포커스를 주어 키보드는 띄우지 않는다.
-      if (viewer) {
-        try { input.focus({ preventScroll: true }); }
-        catch (e) { input.focus(); }
-      }
-    }
-
-    function showBackToast(message) {
-      let toast = document.getElementById("backToastMessage");
-      if (!toast) {
-        toast = document.createElement("div");
-        toast.id = "backToastMessage";
-        Object.assign(toast.style, {
-          position: "fixed", bottom: "60px", left: "50%",
-          transform: "translateX(-50%)", background: "rgba(0,0,0,.75)",
-          color: "#fff", padding: "10px 20px", borderRadius: "20px",
-          zIndex: "9999", opacity: "0", transition: "opacity .3s",
-          whiteSpace: "nowrap", maxWidth: "90vw"
-        });
-        document.body.appendChild(toast);
-      }
-      toast.textContent = message;
-      toast.style.opacity = "1";
-      clearTimeout(backToastTimer);
-      backToastTimer = setTimeout(() => toast.style.opacity = "0", 1500);
-    }
-
-    // 검색대기화면의 종료 방지용 guard를 한 단계 둔다.
-    history.replaceState({ khymnBase: true }, "", location.href);
-    history.pushState({ khymnGuard: true }, "", location.href);
-
-    window.addEventListener("popstate", (event) => {
-      // 검색 결과 상태에서 뒤로가기를 누르면 BASE/GUARD 쪽으로 이동한 뒤
-      // 검색대기화면만 복원한다. 이 키 입력은 종료용 첫 누름으로 세지 않는다.
-      if (searchHistoryActive) {
-        resetSearchScreen();
-        // 현재 위치가 guard 아래로 내려갔을 수 있으므로 guard를 다시 확보한다.
-        history.pushState({ khymnGuard: true }, "", location.href);
-        return;
-      }
-
-      // 검색대기화면에서는 첫 뒤로가기에 안내만 표시하고 guard를 복구한다.
-      const now = Date.now();
-      if (now - lastBackPress < 2000) {
-        // 두 번째 뒤로가기: 추가 메시지 없이 앱 밖으로 나간다.
-        lastBackPress = 0;
-        history.back();
-        return;
-      }
-
-      showBackToast("한 번 더 누르면 종료합니다.");
-      lastBackPress = now;
-      history.pushState({ khymnGuard: true }, "", location.href);
-    });
 
 
   </script>
