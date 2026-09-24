@@ -344,6 +344,94 @@
       navigator.serviceWorker.ready.then(() => hideAppLoading());
 
 
+    /**** 11) 안드로이드 뒤로가기 제어 ****/
+    let lastBackPress = 0;
+    let backToastTimer = null;
+
+    function resetSearchScreen() {
+      const input = document.getElementById("searchInput");
+      const viewer = document.getElementById("pdfViewer");
+      const popup = document.getElementById("bookmarkPopup");
+
+      if (popup && popup.style.display === "block") {
+        closeBookmarkPopup();
+        return true;
+      }
+
+      const hasSearchState =
+        (input && input.value.trim() !== "") ||
+        lastShownNumber !== null ||
+        (viewer && viewer.querySelector("canvas"));
+
+      if (!hasSearchState) return false;
+
+      if (input) input.value = "";
+      lastShownNumber = null;
+      lastQueryIsNumeric = true;
+      lastTitleMatchIndices = [];
+      lastTitleMatchPos = -1;
+
+      if (viewer) {
+        viewer.innerHTML = `
+          <div class="notice-box">
+            <div class="notice-title">🔍 성가 검색</div>
+            <div class="notice-desc">성가번호나 제목의 단어을 입력하고 엔터키를 누르세요.<br>
+              좌우 화살표를 누르면 다음 번호나 다음 단어 성가를 찾아갑니다.
+            </div>
+          </div>`;
+      }
+      window.scrollTo({ top: 0 });
+      return true;
+    }
+
+    function showBackToast(message) {
+      let toast = document.getElementById("backToastMessage");
+      if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "backToastMessage";
+        Object.assign(toast.style, {
+          position: "fixed", bottom: "60px", left: "50%",
+          transform: "translateX(-50%)", background: "rgba(0,0,0,.75)",
+          color: "#fff", padding: "10px 20px", borderRadius: "20px",
+          zIndex: "9999", opacity: "0", transition: "opacity .3s",
+          whiteSpace: "nowrap", maxWidth: "90vw"
+        });
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.style.opacity = "1";
+      clearTimeout(backToastTimer);
+      backToastTimer = setTimeout(() => toast.style.opacity = "0", 1500);
+    }
+
+    // searchhymn.html 안에서 뒤로가기를 처리해 index.html(시작화면)로 돌아가지 않게 한다.
+    history.replaceState({ khymnBase: true }, "", location.href);
+    history.pushState({ khymnGuard: true }, "", location.href);
+
+    window.addEventListener("popstate", () => {
+      // 검색 결과/입력값/책갈피 팝업이 있으면 먼저 검색 기본화면으로 돌아간다.
+      if (resetSearchScreen()) {
+        history.pushState({ khymnGuard: true }, "", location.href);
+        lastBackPress = 0;
+        return;
+      }
+
+      // 이미 검색 기본화면이면 두 번 눌러 종료한다.
+      const now = Date.now();
+      if (now - lastBackPress < 2000) {
+        showBackToast("👋 앱을 종료합니다.");
+        setTimeout(() => {
+          // 시작화면(index.html)이 보이지 않도록 현재 PWA 창을 종료 방향으로 보낸다.
+          history.go(-2);
+        }, 500);
+      } else {
+        showBackToast("한 번 더 누르면 종료합니다.");
+        lastBackPress = now;
+        history.pushState({ khymnGuard: true }, "", location.href);
+      }
+    });
+
+
   </script>
 </body>
 
